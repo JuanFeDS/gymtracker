@@ -17,6 +17,7 @@ const ProfileView: React.FC<ProfileViewProps> = ({ profile, onUpdate, onLogout }
     const [alias, setAlias] = useState(profile.alias);
     const [pin, setPin] = useState(profile.pin);
     const [goal, setGoal] = useState(profile.goal);
+    const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
     const isDirty = alias !== profile.alias || pin !== profile.pin || goal !== profile.goal;
     const isValid = alias.trim().length >= 2 && pin.length === 4;
 
@@ -24,6 +25,11 @@ const ProfileView: React.FC<ProfileViewProps> = ({ profile, onUpdate, onLogout }
         event.preventDefault();
         if (!isValid || !isDirty) return;
         onUpdate({ alias: alias.trim(), pin, goal });
+    };
+
+    const handleLogout = () => {
+        onLogout();
+        setShowLogoutConfirm(false);
     };
 
     return (
@@ -75,16 +81,52 @@ const ProfileView: React.FC<ProfileViewProps> = ({ profile, onUpdate, onLogout }
                     </button>
                 </form>
             </div>
-
-            <div className="profile-card danger-card">
-                <h4>Seguridad</h4>
-                <p>Salir de tu cuenta eliminará los datos locales del dispositivo.</p>
-                <button className="cta-danger" type="button" onClick={onLogout}>
-                    Cerrar sesión
-                </button>
-            </div>
+            <button
+                type="button"
+                onClick={() => setShowLogoutConfirm(true)}
+                className="cta-danger"
+                style={{ justifySelf: 'stretch', marginTop: 'var(--spacing-md)', width: '100%' }}
+            >
+                Cerrar sesión
+            </button>
+            {showLogoutConfirm && (
+                <div style={overlayStyle}>
+                    <div className="glass animate-fade-scale" style={modalStyle}>
+                        <h3 style={{ marginBottom: 'var(--spacing-sm)' }}>¿Cerrar sesión?</h3>
+                        <p style={{ marginBottom: 'var(--spacing-lg)', color: 'var(--text-muted)' }}>
+                            Solo cerrarás sesión en este dispositivo; toda tu información seguirá protegida en la nube.
+                        </p>
+                        <div className="flex gap-sm" style={{ justifyContent: 'flex-end' }}>
+                            <button type="button" className="cta-ghost" onClick={() => setShowLogoutConfirm(false)}>
+                                Cancelar
+                            </button>
+                            <button type="button" className="cta-danger" onClick={handleLogout}>
+                                Sí, cerrar sesión
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
+};
+
+const overlayStyle: React.CSSProperties = {
+    position: 'fixed',
+    inset: 0,
+    background: 'rgba(0, 0, 0, 0.75)',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: 2000,
+    padding: 'var(--spacing-lg)'
+};
+
+const modalStyle: React.CSSProperties = {
+    width: 'min(420px, 100%)',
+    borderRadius: 'var(--radius-lg)',
+    padding: 'var(--spacing-xl)',
+    border: `1px solid var(--border)`
 };
 
 export default ProfileView;
