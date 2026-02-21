@@ -54,10 +54,11 @@ export async function fetchRemoteProfile(userId?: string): Promise<UserProfile |
     return mapRowToProfile(data);
 }
 
-export async function createRemoteProfile(payload: { alias: string; pin: string; goal?: UserProfile['goal']; avatarColor: string; }): Promise<UserProfile | null> {
+export async function createRemoteProfile(payload: { id?: string; alias: string; pin: string; goal?: UserProfile['goal']; avatarColor: string; }): Promise<UserProfile | null> {
     const { data, error } = await supabase
         .from('users')
         .insert({
+            user_id: payload.id,
             username: payload.alias,
             password: payload.pin,
             user_goal: payload.goal,

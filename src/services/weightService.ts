@@ -1,4 +1,5 @@
 import type { WeightLog } from '../types';
+import { generateId } from '../utils/id';
 import { supabase } from './supabaseClient';
 
 const mapRowToWeight = (row: any): WeightLog => ({
@@ -26,6 +27,7 @@ export async function addRemoteWeightLog(userId: string, weight: number): Promis
     const { data, error } = await supabase
         .from('weights')
         .insert({
+            weight_id: generateId(),
             user_id: userId,
             recorded_at: new Date().toISOString().slice(0, 10),
             weight_kg: weight
@@ -39,4 +41,19 @@ export async function addRemoteWeightLog(userId: string, weight: number): Promis
     }
 
     return mapRowToWeight(data);
+}
+
+export async function deleteRemoteWeightLog(userId: string, weightId: string): Promise<boolean> {
+    const { error } = await supabase
+        .from('weights')
+        .delete()
+        .eq('user_id', userId)
+        .eq('weight_id', weightId);
+
+    if (error) {
+        console.error('Error al eliminar peso en Supabase:', error.message);
+        return false;
+    }
+
+    return true;
 }

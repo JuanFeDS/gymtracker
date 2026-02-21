@@ -37,7 +37,7 @@ function App() {
     }
   }, [addSession, profile?.id]);
   const { session, startSession, finishSession, updateSession } = useWorkoutSession(handleSessionComplete);
-  const { logs: weightLogs, addLog, loading: weightLoading } = useWeightLogs(profile?.id);
+  const { logs: weightLogs, addLog, deleteLog: deleteWeightLog, loading: weightLoading } = useWeightLogs(profile?.id);
   const [newWeight, setNewWeight] = useState('');
   const gamification = useGamificationStats(profile?.id);
 
@@ -95,6 +95,7 @@ function App() {
               newValue={newWeight}
               onChange={setNewWeight}
               onSubmit={handleAddWeight}
+              onDelete={deleteWeightLog}
               loading={weightLoading}
             />
           )}
