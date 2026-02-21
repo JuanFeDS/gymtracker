@@ -397,6 +397,137 @@ button:active {
   transition: width var(--transition-smooth);
 }
 
+.gamification-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: var(--spacing-lg);
+}
+
+.gamification-hero {
+  grid-column: span 2;
+  background: linear-gradient(135deg, rgba(64, 224, 208, 0.15), rgba(128, 255, 128, 0.05));
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--spacing-lg);
+}
+
+.streak-pill {
+  display: flex;
+  gap: var(--spacing-md);
+  align-items: center;
+}
+
+.streak-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 16px;
+  background: rgba(255, 137, 6, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+}
+
+.chip {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+}
+
+.gamification-card {
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.reward-card {
+  background: radial-gradient(circle at top, rgba(128, 255, 128, 0.15), transparent);
+}
+
+.xp-shell {
+  width: 100%;
+  height: 10px;
+  background: var(--surface-hover);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.xp-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary), var(--accent));
+  border-radius: var(--radius-full);
+  transition: width var(--transition-smooth);
+}
+
+.mission-section {
+  grid-column: span 2;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.mission-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--spacing-md);
+}
+
+.mission-card {
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  border: 1px solid var(--border);
+  background: var(--surface-color);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.mission-card--done {
+  border-color: var(--accent);
+  box-shadow: 0 0 20px rgba(128, 255, 128, 0.15);
+}
+
+.mission-description {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.mission-meta {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.cta-ghost,
+.cta-primary {
+  border-radius: var(--radius-full);
+  padding: 0.6rem 1.4rem;
+  font-weight: 600;
+}
+
+.cta-ghost {
+  border: 1px solid var(--border);
+  color: var(--text-main);
+}
+
+.cta-primary {
+  background: var(--primary);
+  color: #000;
+}
+
+@media (max-width: 768px) {
+  .gamification-hero,
+  .mission-section {
+    grid-column: span 1;
+  }
+}
+
 @media (max-width: 900px) {
   .home-card--tall,
   .home-card--wide {

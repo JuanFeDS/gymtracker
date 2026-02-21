@@ -4,10 +4,12 @@ import PageHeader from './components/PageHeader';
 import WorkoutView from './views/WorkoutView';
 import WeightView from './views/WeightView';
 import HomeView from './views/HomeView';
+import GamificationView from './views/GamificationView';
 import { useWorkoutSession } from './hooks/useWorkoutSession';
 import { useWeightLogs } from './hooks/useWeightLogs';
 import { useWorkoutStats } from './hooks/useWorkoutStats';
 import { useWeightTrend } from './hooks/useWeightTrend';
+import { useGamificationStats } from './hooks/useGamificationStats';
 
 const TAB_COPY: Record<string, { subtitle: string; title: string }> = {
   home: { subtitle: 'Resumen general', title: 'Dashboard' },
@@ -22,6 +24,7 @@ function App() {
   const { session, startSession, finishSession, updateSession } = useWorkoutSession();
   const { logs: weightLogs, addLog } = useWeightLogs();
   const [newWeight, setNewWeight] = useState('');
+  const gamification = useGamificationStats();
 
   const workoutStats = useWorkoutStats(session);
   const weightTrend = useWeightTrend(weightLogs);
@@ -75,25 +78,7 @@ function App() {
           )}
 
           {activeTab === 'gamification' && (
-            <div className="flex flex-col gap-md">
-              <div className="glass flex items-center gap-lg" style={{ padding: 'var(--spacing-lg)', borderRadius: 'var(--radius-lg)', borderLeft: '4px solid var(--accent)' }}>
-                <div style={{ fontSize: '2rem' }}>🔥</div>
-                <div>
-                  <h3 style={{ color: 'var(--accent)' }}>Streak 3 días</h3>
-                  <p style={{ fontSize: '0.8rem' }}>Mantén el ritmo.</p>
-                </div>
-              </div>
-
-              <div className="glass" style={{ padding: 'var(--spacing-lg)', borderRadius: 'var(--radius-lg)' }}>
-                <div className="flex justify-between items-center" style={{ marginBottom: 'var(--spacing-sm)' }}>
-                  <span style={{ fontWeight: 600 }}>Nivel 5</span>
-                  <span style={{ fontSize: '0.8rem' }}>450 / 1000 XP</span>
-                </div>
-                <div style={{ width: '100%', height: '8px', background: 'var(--border)', borderRadius: '4px', overflow: 'hidden' }}>
-                  <div style={{ width: '45%', height: '100%', background: 'var(--primary)', boxShadow: '0 0 10px var(--primary-glow)' }} />
-                </div>
-              </div>
-            </div>
+            <GamificationView stats={gamification.stats} />
           )}
         </section>
       </div>

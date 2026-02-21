@@ -38,6 +38,23 @@ export type WeightLog = {
     weight: number;
 };
 
+export type GamificationMission = {
+    id: string;
+    title: string;
+    description: string;
+    progress: number;
+    goal: number;
+    rewardXp: number;
+};
+
+export type GamificationStats = {
+    xp: number;
+    level: number;
+    nextLevelXp: number;
+    streakDays: number;
+    missions: GamificationMission[];
+};
+
 export type Exercise = {
     id: string;
     name: string;
