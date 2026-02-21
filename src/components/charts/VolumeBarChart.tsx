@@ -12,9 +12,28 @@ const chartStyle: React.CSSProperties = {
 };
 
 const VolumeBarChart: React.FC<VolumeBarChartProps> = ({ sessions }) => {
-    const recent = useMemo(() => sessions.slice(0, 7).reverse(), [sessions]);
+    const dailySeries = useMemo(() => {
+        if (!sessions.length) return [];
 
-    if (!recent.length) {
+        const totalsByDate = new Map<string, number>();
+
+        sessions.forEach(session => {
+            const date = new Date(session.startTime).toISOString().slice(0, 10);
+            const currentVolume = totalsByDate.get(date) ?? 0;
+            const sessionVolume = session.metrics?.totalVolume ?? 0;
+            totalsByDate.set(date, currentVolume + sessionVolume);
+        });
+
+        const sortedDates = Array.from(totalsByDate.keys()).sort((a, b) => (a < b ? -1 : 1));
+        const lastSeven = sortedDates.slice(-7);
+
+        return lastSeven.map(date => ({
+            label: new Date(date).toLocaleDateString(),
+            volume: totalsByDate.get(date) ?? 0
+        }));
+    }, [sessions]);
+
+    if (!dailySeries.length) {
         return (
             <div style={{ ...chartStyle, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-muted)' }}>
                 Aún no tienes sesiones registradas.
@@ -22,8 +41,8 @@ const VolumeBarChart: React.FC<VolumeBarChartProps> = ({ sessions }) => {
         );
     }
 
-    const categories = recent.map(session => new Date(session.startTime).toLocaleDateString());
-    const volumes = recent.map(session => session.metrics.totalVolume);
+    const categories = dailySeries.map(day => day.label);
+    const volumes = dailySeries.map(day => day.volume);
 
     const option = {
         tooltip: { trigger: 'axis' },

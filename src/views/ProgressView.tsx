@@ -52,15 +52,26 @@ const ProgressView: React.FC<ProgressViewProps> = ({ sessions }) => {
             <div className="progress-card progress-timeline">
                 <h4>Historial reciente</h4>
                 <div className="timeline-list">
-                    {sessions.slice(0, 10).map((session) => (
+                    {sessions.slice(0, 10).map((session, index) => (
                         <div key={session.id} className="timeline-item">
-                            <div>
-                                <p className="timeline-date">{new Date(session.startTime).toLocaleDateString()}</p>
-                                <h5>{session.exercises.length} ejercicios</h5>
+                            <div className="timeline-bullet">
+                                <span>{sessions.length - index}</span>
                             </div>
-                            <div className="timeline-meta">
-                                <span>{session.metrics?.totalVolume ?? 0} kg</span>
-                                <span>{session.metrics?.durationMinutes ?? 0} min</span>
+                            <div className="timeline-content">
+                                <div className="timeline-header">
+                                    <p className="timeline-date">{new Date(session.startTime).toLocaleDateString()}</p>
+                                    <span className="timeline-chip">{session.exercises.length} ejercicios</span>
+                                </div>
+                                <div className="timeline-meta">
+                                    <div>
+                                        <p className="timeline-label">Volumen</p>
+                                        <strong>{session.metrics?.totalVolume ?? 0} kg</strong>
+                                    </div>
+                                    <div>
+                                        <p className="timeline-label">Duración</p>
+                                        <strong>{session.metrics?.durationMinutes ?? 0} min</strong>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     ))}
