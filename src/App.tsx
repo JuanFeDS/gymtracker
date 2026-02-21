@@ -83,6 +83,7 @@ function App() {
           {activeTab === 'workout' && (
             <WorkoutView
               session={session}
+              recentSessions={sessions.slice(0, 3)}
               onStart={startSession}
               onFinish={finishSession}
               onUpdate={updateSession}
