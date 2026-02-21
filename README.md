@@ -1,73 +1,102 @@
-# React + TypeScript + Vite
+# GymTracker
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+> Dashboard personal para registrar entrenamientos, métricas corporales y progreso, con sincronización en Supabase y experiencia mobile-first.
 
-Currently, two official plugins are available:
+## ⚙️ Stack principal
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- React 19 + TypeScript
+- Vite 7 para bundling y HMR
+- Supabase como backend (REST + tablas `users`, `weights`, `sessions`)
+- ECharts para visualizaciones
 
-## React Compiler
+## 🚀 Funcionalidades clave
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+1. **Onboarding con registro/login**
+   - Alias, email obligatorio, PIN de 4 dígitos y objetivo (fuerza/hipertrofia/resistencia).
+   - Registro exitoso = inicio de sesión automático con sincronización en la nube.
 
-## Expanding the ESLint configuration
+2. **Sesiones de entrenamiento**
+   - Inicio/parada de sesiones con ejercicios, sets y métricas agregadas.
+   - Últimas 3 sesiones visibles desde la pestaña *Workout* con modal de detalle animado.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+3. **Seguimiento de peso corporal**
+   - Logging diario conectado a Supabase (compatible con RLS).
+   - Eliminación remota + actualización instantánea del UI.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+4. **Gamificación y progreso**
+   - Estadísticas premium de XP, streaks y misiones.
+   - Vistas de progreso con gráficas + animaciones globales (fade, slide, stagger).
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+5. **Perfil y seguridad**
+   - Edición de alias, email, PIN y objetivo.
+   - Botón rojo de cierre de sesión con modal personalizado que aclara que los datos permanecen en la nube.
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## 📁 Estructura relevante
+
+```
+src/
+├─ components/        # Layout, navegación, modales
+├─ hooks/             # useUserProfile, useWeightLogs, useWorkoutSession, etc.
+├─ services/          # Integraciones Supabase (userService, weightService, sessionService)
+├─ views/             # Home, Workout, Weight, Progress, Gamification, Profile, Onboarding
+└─ types.ts           # Tipos compartidos (UserProfile, WeightLog, CompletedSession...)
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 📦 Requisitos previos
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+- Node.js ≥ 18
+- Cuenta de Supabase con tablas configuradas y RLS acorde al proyecto
+- Variables de entorno (archivo `.env`):
+  - `VITE_SUPABASE_URL`
+  - `VITE_SUPABASE_ANON_KEY`
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## 🛠️ Configuración y uso
+
+1. **Instalar dependencias**
+   ```bash
+   npm install
+   ```
+
+2. **Configurar entorno**
+   - Copia `.env.example` (si existe) o crea `.env` con las claves anteriores.
+   - Garantiza que las tablas `users`, `weights`, `sessions`, `session_exercises` usen UUID en `user_id`.
+
+3. **Correr en desarrollo**
+   ```bash
+   npm run dev
+   ```
+   La app queda disponible en `http://localhost:5173`.
+
+4. **Build de producción**
+   ```bash
+   npm run build
+   npm run preview
+   ```
+
+5. **Lint** (opcional)
+   ```bash
+   npm run lint
+   ```
+
+## 🔐 Notas sobre datos y RLS
+
+- Todos los datos sensibles viven en Supabase; la app guarda caches locales mínimos para UX.
+- RLS: las políticas deben permitir operaciones basadas en `user_id` cuando se usa la anon key.
+- Al cerrar sesión solo se limpia el estado local; la información remota permanece intacta.
+
+## 🧪 Flujo recomendado para QA
+
+1. Crear nuevo perfil → debe iniciar sesión automáticamente.
+2. Registrar un peso → confirmar el registro en Supabase.
+3. Completar una sesión → comprobarla en la pestaña Workout y en el modal.
+4. Cerrar sesión → volver a iniciar con alias/PIN para validar sincronización.
+
+## 📌 Roadmap corto
+
+- Recuperación de PIN vía email.
+- Sincronización remota completa de sesiones históricas.
+- Tests automatizados para hooks críticos (`useUserProfile`, `useWeightLogs`).
+
+---
+
+¿Necesitas pasos extra (deploy, scripts de migración, etc.)? Avísame y lo añadimos.
