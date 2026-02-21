@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { UserProfile } from '../types';
 import { loadJSON, removeKey, saveJSON } from '../utils/storage';
-import { generateId } from '../utils/id';
 import { createRemoteProfile, fetchRemoteProfile, loginWithAliasPin, updateRemoteProfile as updateRemoteProfileRecord } from '../services/userService';
 
 const STORAGE_KEY = 'userProfile';
@@ -55,13 +54,6 @@ export const useUserProfile = () => {
     }, [profile?.id, persistProfile]);
 
     const saveProfile = useCallback((data: NewProfile) => {
-        const fallback: UserProfile = {
-            ...data,
-            id: generateId(),
-            avatarColor: randomColor()
-        };
-
-        persistProfile(fallback);
         setError(null);
 
         (async () => {
@@ -70,11 +62,13 @@ export const useUserProfile = () => {
                 alias: data.alias,
                 pin: data.pin,
                 goal: data.goal,
-                avatarColor: fallback.avatarColor
+                avatarColor: randomColor()
             });
             if (remote) {
                 persistProfile(remote);
                 syncedIdRef.current = remote.id;
+            } else {
+                setError('No se pudo crear el perfil. Intenta nuevamente.');
             }
             setSyncing(false);
         })();
