@@ -11,6 +11,7 @@ const randomColor = () => {
 };
 
 type NewProfile = Omit<UserProfile, 'id' | 'avatarColor'>;
+type UpdateProfile = Partial<Omit<UserProfile, 'id' | 'avatarColor'>>;
 
 export const useUserProfile = () => {
     const [profile, setProfile] = useState<UserProfile | null>(() =>
@@ -27,6 +28,15 @@ export const useUserProfile = () => {
         saveJSON(STORAGE_KEY, next);
     }, []);
 
+    const updateProfile = useCallback((changes: UpdateProfile) => {
+        setProfile(prev => {
+            if (!prev) return prev;
+            const next = { ...prev, ...changes } as UserProfile;
+            saveJSON(STORAGE_KEY, next);
+            return next;
+        });
+    }, []);
+
     const logout = useCallback(() => {
         setProfile(null);
         removeKey(STORAGE_KEY);
@@ -35,6 +45,7 @@ export const useUserProfile = () => {
     return {
         profile,
         saveProfile,
+        updateProfile,
         logout
     };
 };

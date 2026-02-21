@@ -7,6 +7,7 @@ import HomeView from './views/HomeView';
 import GamificationView from './views/GamificationView';
 import ProgressView from './views/ProgressView';
 import OnboardingView from './views/OnboardingView';
+import ProfileView from './views/ProfileView';
 import { useWorkoutSession } from './hooks/useWorkoutSession';
 import { useWeightLogs } from './hooks/useWeightLogs';
 import { useWorkoutStats } from './hooks/useWorkoutStats';
@@ -25,7 +26,7 @@ const TAB_COPY: Record<string, { subtitle: string; title: string }> = {
 
 function App() {
   const [activeTab, setActiveTab] = useState('home');
-  const { profile, saveProfile } = useUserProfile();
+  const { profile, saveProfile, updateProfile, logout } = useUserProfile();
   const { sessions, addSession } = useSessionHistory();
   const { session, startSession, finishSession, updateSession } = useWorkoutSession(addSession);
   const { logs: weightLogs, addLog } = useWeightLogs();
@@ -88,6 +89,10 @@ function App() {
 
           {activeTab === 'gamification' && (
             <GamificationView stats={gamification.stats} />
+          )}
+
+          {activeTab === 'profile' && profile && (
+            <ProfileView profile={profile} onUpdate={updateProfile} onLogout={logout} />
           )}
         </section>
       </div>
