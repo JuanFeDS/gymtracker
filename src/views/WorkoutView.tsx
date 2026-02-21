@@ -12,8 +12,8 @@ const WorkoutView: React.FC<WorkoutViewProps> = ({ session, onStart, onFinish, o
     if (!session) {
         return (
             <div className="glass" style={{ padding: 'var(--spacing-lg)', borderRadius: 'var(--radius-lg)' }}>
-                <h3 style={{ marginBottom: 'var(--spacing-md)' }}>Sin sesión activa</h3>
-                <p style={{ marginBottom: 'var(--spacing-lg)' }}>¿Listo para entrenar hoy?</p>
+                <h3 style={{ marginBottom: 'var(--spacing-md)' }}>Sin entrenamiento activo</h3>
+                <p style={{ marginBottom: 'var(--spacing-lg)' }}>Prepárate y comienza tu próximo workout.</p>
                 <button
                     onClick={onStart}
                     style={{
@@ -26,7 +26,7 @@ const WorkoutView: React.FC<WorkoutViewProps> = ({ session, onStart, onFinish, o
                         boxShadow: '0 0 20px var(--primary-glow)'
                     }}
                 >
-                    INICIAR SESIÓN
+                    INICIAR ENTRENAMIENTO
                 </button>
             </div>
         );
