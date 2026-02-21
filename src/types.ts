@@ -55,6 +55,14 @@ export type GamificationStats = {
     missions: GamificationMission[];
 };
 
+export type UserProfile = {
+    id: string;
+    alias: string;
+    pin: string;
+    goal?: 'fuerza' | 'hipertrofia' | 'resistencia';
+    avatarColor: string;
+};
+
 export type Exercise = {
     id: string;
     name: string;

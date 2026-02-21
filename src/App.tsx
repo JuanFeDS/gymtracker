@@ -6,12 +6,14 @@ import WeightView from './views/WeightView';
 import HomeView from './views/HomeView';
 import GamificationView from './views/GamificationView';
 import ProgressView from './views/ProgressView';
+import OnboardingView from './views/OnboardingView';
 import { useWorkoutSession } from './hooks/useWorkoutSession';
 import { useWeightLogs } from './hooks/useWeightLogs';
 import { useWorkoutStats } from './hooks/useWorkoutStats';
 import { useWeightTrend } from './hooks/useWeightTrend';
 import { useGamificationStats } from './hooks/useGamificationStats';
 import { useSessionHistory } from './hooks/useSessionHistory';
+import { useUserProfile } from './hooks/useUserProfile';
 
 const TAB_COPY: Record<string, { subtitle: string; title: string }> = {
   home: { subtitle: 'Resumen general', title: 'Dashboard' },
@@ -23,6 +25,7 @@ const TAB_COPY: Record<string, { subtitle: string; title: string }> = {
 
 function App() {
   const [activeTab, setActiveTab] = useState('home');
+  const { profile, saveProfile } = useUserProfile();
   const { sessions, addSession } = useSessionHistory();
   const { session, startSession, finishSession, updateSession } = useWorkoutSession(addSession);
   const { logs: weightLogs, addLog } = useWeightLogs();
@@ -33,6 +36,7 @@ function App() {
   const weightTrend = useWeightTrend(weightLogs);
 
   const headerCopy = useMemo(() => TAB_COPY[activeTab] ?? TAB_COPY.home, [activeTab]);
+  const subtitle = profile ? `${headerCopy.subtitle} · ${profile.alias}` : headerCopy.subtitle;
 
   const handleAddWeight = () => {
     if (!newWeight) return;
@@ -40,10 +44,14 @@ function App() {
     setNewWeight('');
   };
 
+  if (!profile) {
+    return <OnboardingView onSubmit={saveProfile} />;
+  }
+
   return (
     <Layout activeTab={activeTab} onTabChange={setActiveTab}>
       <div className="flex flex-col gap-md">
-        <PageHeader subtitle={headerCopy.subtitle} title={headerCopy.title} />
+        <PageHeader subtitle={subtitle} title={headerCopy.title} />
         <section>
           {activeTab === 'home' && (
             <HomeView
