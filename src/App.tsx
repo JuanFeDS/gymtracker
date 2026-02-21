@@ -5,11 +5,13 @@ import WorkoutView from './views/WorkoutView';
 import WeightView from './views/WeightView';
 import HomeView from './views/HomeView';
 import GamificationView from './views/GamificationView';
+import ProgressView from './views/ProgressView';
 import { useWorkoutSession } from './hooks/useWorkoutSession';
 import { useWeightLogs } from './hooks/useWeightLogs';
 import { useWorkoutStats } from './hooks/useWorkoutStats';
 import { useWeightTrend } from './hooks/useWeightTrend';
 import { useGamificationStats } from './hooks/useGamificationStats';
+import { useSessionHistory } from './hooks/useSessionHistory';
 
 const TAB_COPY: Record<string, { subtitle: string; title: string }> = {
   home: { subtitle: 'Resumen general', title: 'Dashboard' },
@@ -21,7 +23,8 @@ const TAB_COPY: Record<string, { subtitle: string; title: string }> = {
 
 function App() {
   const [activeTab, setActiveTab] = useState('home');
-  const { session, startSession, finishSession, updateSession } = useWorkoutSession();
+  const { sessions, addSession } = useSessionHistory();
+  const { session, startSession, finishSession, updateSession } = useWorkoutSession(addSession);
   const { logs: weightLogs, addLog } = useWeightLogs();
   const [newWeight, setNewWeight] = useState('');
   const gamification = useGamificationStats();
@@ -72,9 +75,7 @@ function App() {
           )}
 
           {activeTab === 'progress' && (
-            <div className="glass" style={{ padding: 'var(--spacing-lg)', borderRadius: 'var(--radius-lg)' }}>
-              <p>Historial y gráficas en camino...</p>
-            </div>
+            <ProgressView sessions={sessions} />
           )}
 
           {activeTab === 'gamification' && (
