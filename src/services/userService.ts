@@ -12,6 +12,7 @@ const normalizeGoal = (goal?: string | null): UserProfile['goal'] => {
 const mapRowToProfile = (row: any): UserProfile => ({
     id: row.user_id,
     alias: row.username ?? 'Sin alias',
+    email: row.user_email ?? '',
     pin: row.password ?? '',
     goal: normalizeGoal(row.user_goal),
     avatarColor: row.avatar_color ?? '#40E0D0'
@@ -54,18 +55,24 @@ export async function fetchRemoteProfile(userId?: string): Promise<UserProfile |
     return mapRowToProfile(data);
 }
 
-export async function createRemoteProfile(payload: { id?: string; alias: string; pin: string; goal?: UserProfile['goal']; avatarColor: string; }): Promise<UserProfile | null> {
+export async function createRemoteProfile(payload: { id?: string; alias: string; email: string; pin: string; goal?: UserProfile['goal']; avatarColor: string; }): Promise<UserProfile | null> {
+    const insertPayload: Record<string, string | undefined> = {
+        username: payload.alias,
+        user_email: payload.email,
+        password: payload.pin,
+        user_goal: payload.goal,
+        avatar_color: payload.avatarColor,
+        created_at: today(),
+        updated_at: today()
+    };
+
+    if (payload.id) {
+        insertPayload.user_id = payload.id;
+    }
+
     const { data, error } = await supabase
         .from('users')
-        .insert({
-            user_id: payload.id,
-            username: payload.alias,
-            password: payload.pin,
-            user_goal: payload.goal,
-            avatar_color: payload.avatarColor,
-            created_at: today(),
-            updated_at: today()
-        })
+        .insert(insertPayload)
         .select('*')
         .single();
 
@@ -77,9 +84,10 @@ export async function createRemoteProfile(payload: { id?: string; alias: string;
     return mapRowToProfile(data);
 }
 
-export async function updateRemoteProfile(userId: string, changes: Partial<{ alias: string; pin: string; goal?: UserProfile['goal']; avatarColor: string; }>): Promise<UserProfile | null> {
+export async function updateRemoteProfile(userId: string, changes: Partial<{ alias: string; email: string; pin: string; goal?: UserProfile['goal']; avatarColor: string; }>): Promise<UserProfile | null> {
     const mapped: Record<string, string | undefined> = {
         username: changes.alias,
+        user_email: changes.email,
         password: changes.pin,
         user_goal: changes.goal,
         avatar_color: changes.avatarColor,

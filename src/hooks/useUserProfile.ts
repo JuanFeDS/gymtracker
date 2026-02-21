@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import type { UserProfile } from '../types';
 import { loadJSON, removeKey, saveJSON } from '../utils/storage';
 import { createRemoteProfile, fetchRemoteProfile, loginWithAliasPin, updateRemoteProfile as updateRemoteProfileRecord } from '../services/userService';
+import { generateId } from '../utils/id';
 
 const STORAGE_KEY = 'userProfile';
 
@@ -55,19 +56,35 @@ export const useUserProfile = () => {
 
     const saveProfile = useCallback((data: NewProfile) => {
         setError(null);
+        const provisionalId = generateId();
+        const avatarColor = randomColor();
+        const optimisticProfile: UserProfile = {
+            id: provisionalId,
+            alias: data.alias,
+            email: data.email,
+            pin: data.pin,
+            goal: data.goal,
+            avatarColor
+        };
+
+        persistProfile(optimisticProfile);
+        syncedIdRef.current = provisionalId;
 
         (async () => {
             setSyncing(true);
             const remote = await createRemoteProfile({
+                id: provisionalId,
                 alias: data.alias,
+                email: data.email,
                 pin: data.pin,
                 goal: data.goal,
-                avatarColor: randomColor()
+                avatarColor
             });
             if (remote) {
                 persistProfile(remote);
                 syncedIdRef.current = remote.id;
             } else {
+                persistProfile(null);
                 setError('No se pudo crear el perfil. Intenta nuevamente.');
             }
             setSyncing(false);
@@ -100,6 +117,7 @@ export const useUserProfile = () => {
             setSyncing(true);
             const remote = await updateRemoteProfileRecord(profile.id, {
                 alias: optimistic.alias,
+                email: optimistic.email,
                 pin: optimistic.pin,
                 goal: optimistic.goal,
                 avatarColor: optimistic.avatarColor

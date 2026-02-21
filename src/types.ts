@@ -58,6 +58,7 @@ export type GamificationStats = {
 export type UserProfile = {
     id: string;
     alias: string;
+    email: string;
     pin: string;
     goal?: 'fuerza' | 'hipertrofia' | 'resistencia';
     avatarColor: string;

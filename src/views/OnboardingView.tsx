@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 interface OnboardingViewProps {
-    onSubmit: (data: { alias: string; pin: string; goal?: 'fuerza' | 'hipertrofia' | 'resistencia' }) => void;
+    onSubmit: (data: { alias: string; email: string; pin: string; goal?: 'fuerza' | 'hipertrofia' | 'resistencia' }) => void;
     onLogin: (alias: string, pin: string) => Promise<{ success: boolean }>;
     syncing?: boolean;
     authError?: string | null;
@@ -13,8 +13,11 @@ const goals: { label: string; value: 'fuerza' | 'hipertrofia' | 'resistencia' }[
     { label: 'Resistencia', value: 'resistencia' }
 ];
 
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 const OnboardingView: React.FC<OnboardingViewProps> = ({ onSubmit, onLogin, syncing = false, authError }) => {
     const [alias, setAlias] = useState('');
+    const [email, setEmail] = useState('');
     const [pin, setPin] = useState('');
     const [goal, setGoal] = useState<'fuerza' | 'hipertrofia' | 'resistencia' | undefined>(undefined);
     const [mode, setMode] = useState<'create' | 'login'>('create');
@@ -22,13 +25,13 @@ const OnboardingView: React.FC<OnboardingViewProps> = ({ onSubmit, onLogin, sync
     const [loginPin, setLoginPin] = useState('');
     const [loginError, setLoginError] = useState<string | null>(null);
 
-    const isValid = alias.trim().length >= 2 && pin.trim().length >= 4;
+    const isValid = alias.trim().length >= 2 && emailRegex.test(email.trim()) && pin.trim().length >= 4;
     const isLoginValid = loginAlias.trim().length >= 2 && loginPin.trim().length >= 4;
 
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
         if (!isValid) return;
-        onSubmit({ alias: alias.trim(), pin, goal });
+        onSubmit({ alias: alias.trim(), email: email.trim(), pin, goal });
     };
 
     const handleLogin = async (event: React.FormEvent) => {
@@ -84,6 +87,21 @@ const OnboardingView: React.FC<OnboardingViewProps> = ({ onSubmit, onLogin, sync
                                 placeholder="Ej. TitanGains"
                             />
                             <small>{Math.max(0, 12 - alias.length)} caracteres disponibles</small>
+                        </label>
+
+                        <label>
+                            <span>Email</span>
+                            <input
+                                type="email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                placeholder="titan@gains.com"
+                            />
+                            {!email || emailRegex.test(email.trim()) ? (
+                                <small>Usaremos tu correo para recuperación.</small>
+                            ) : (
+                                <small style={{ color: 'var(--accent-danger)' }}>Ingresa un correo válido.</small>
+                            )}
                         </label>
 
                         <label>
