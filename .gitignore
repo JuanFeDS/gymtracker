@@ -1,3 +1,10 @@
+# Environment variables
+.env
+
+# Directories
+docs/
+database/
+
 # Logs
 logs
 *.log
