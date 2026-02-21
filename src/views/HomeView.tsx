@@ -1,9 +1,12 @@
 import type { WorkoutStats } from '../hooks/useWorkoutStats';
 import type { WeightTrend } from '../hooks/useWeightTrend';
+import type { WeightLog } from '../types';
+import WeightTrendChart from '../components/charts/WeightTrendChart';
 
 interface HomeViewProps {
     stats: WorkoutStats;
     weightTrend: WeightTrend;
+    weightLogs: WeightLog[];
     hasActiveSession: boolean;
     onStartSession: () => void;
     onFinishSession: () => void;
@@ -14,8 +17,7 @@ const StatCard = ({ label, value, helper }: { label: string; value: string; help
         className="glass"
         style={{
             padding: 'var(--spacing-md)',
-            borderRadius: 'var(--radius-md)',
-            margin: 'var(--spacing-sm) 0'
+            borderRadius: 'var(--radius-md)'
         }}
     >
         <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginBottom: '6px' }}>{label}</p>
@@ -24,29 +26,48 @@ const StatCard = ({ label, value, helper }: { label: string; value: string; help
     </div>
 );
 
-const HomeView: React.FC<HomeViewProps> = ({ stats, weightTrend, hasActiveSession, onStartSession, onFinishSession }) => {
+const HomeView: React.FC<HomeViewProps> = ({ stats, weightTrend, weightLogs, hasActiveSession, onStartSession, onFinishSession }) => {
     const trendLabel = weightTrend.direction === 'flat' ? 'Sin cambios' : weightTrend.direction === 'down' ? 'Bajando' : 'Subiendo';
     const ctaLabel = hasActiveSession ? 'Continuar sesión' : 'Iniciar nueva sesión';
 
+    const weeklyTargetSets = 30;
+    const weeklyProgress = Math.min(100, Math.round((stats.totalSets / weeklyTargetSets) * 100));
+
     return (
-        <div className="flex flex-col gap-lg">
-            <div
-                className="grid"
-                style={{
-                    gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))',
-                    gap: 'var(--spacing-lg)'
-                }}
-            >
-                <StatCard label="Sets totales" value={String(stats.totalSets)} helper={`Ejercicios: ${stats.exerciseCount}`} />
-                <StatCard label="Volumen" value={`${stats.totalVolume} kg`} helper={`Duración: ${stats.durationMinutes} min`} />
-                <StatCard label="Peso reciente" value={weightTrend.latest ? `${weightTrend.latest} kg` : '--'} helper={`${trendLabel} ${weightTrend.delta || ''}`} />
+        <div className="home-grid">
+            <div className="home-card home-card--tall">
+                <div className="tile-header">
+                    <div>
+                        <p>Resumen rápido</p>
+                        <h3 style={{ fontSize: '1.4rem' }}>Tu rendimiento</h3>
+                    </div>
+                    <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Actualizado hoy</span>
+                </div>
+                <div className="stat-grid">
+                    <StatCard label="Sets totales" value={String(stats.totalSets)} helper={`Ejercicios: ${stats.exerciseCount}`} />
+                    <StatCard label="Volumen" value={`${stats.totalVolume} kg`} helper={`Duración: ${stats.durationMinutes} min`} />
+                    <StatCard label="Peso reciente" value={weightTrend.latest ? `${weightTrend.latest} kg` : '--'} helper={`${trendLabel} ${weightTrend.delta || ''}`} />
+                </div>
             </div>
 
-            <div className="glass" style={{ padding: 'var(--spacing-lg)', borderRadius: 'var(--radius-lg)' }}>
-                <div className="flex justify-between items-center" style={{ marginBottom: 'var(--spacing-md)' }}>
+            <div className="home-card home-card--wide">
+                <div className="tile-header">
                     <div>
-                        <p style={{ fontSize: '0.85rem', opacity: 0.7 }}>Acciones rápidas</p>
-                        <h3 style={{ fontSize: '1.25rem' }}>Tu entrenamiento</h3>
+                        <p>Peso corporal</p>
+                        <h3 style={{ fontSize: '1.3rem' }}>Tendencia reciente</h3>
+                    </div>
+                    <span style={{ fontSize: '0.85rem', color: trendLabel === 'Bajando' ? 'var(--accent)' : 'var(--primary)' }}>
+                        {trendLabel} {weightTrend.delta ? `${weightTrend.delta} kg` : ''}
+                    </span>
+                </div>
+                <WeightTrendChart data={weightLogs} />
+            </div>
+
+            <div className="home-card">
+                <div className="tile-header">
+                    <div>
+                        <p>Sesiones</p>
+                        <h3 style={{ fontSize: '1.25rem' }}>Acciones rápidas</h3>
                     </div>
                     <span style={{ fontSize: '0.85rem', color: hasActiveSession ? 'var(--accent)' : 'var(--text-muted)' }}>
                         {hasActiveSession ? 'Sesión en progreso' : 'Listo para empezar'}
@@ -83,6 +104,22 @@ const HomeView: React.FC<HomeViewProps> = ({ stats, weightTrend, hasActiveSessio
                         </button>
                     )}
                 </div>
+            </div>
+
+            <div className="home-card">
+                <div className="tile-header">
+                    <div>
+                        <p>Meta semanal</p>
+                        <h3 style={{ fontSize: '1.2rem' }}>Sets completados</h3>
+                    </div>
+                    <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>{stats.totalSets}/{weeklyTargetSets}</span>
+                </div>
+                <div className="progress-shell">
+                    <div className="progress-fill" style={{ width: `${weeklyProgress}%` }} />
+                </div>
+                <p style={{ marginTop: 'var(--spacing-sm)', color: 'var(--text-muted)' }}>
+                    Te faltan {Math.max(0, weeklyTargetSets - stats.totalSets)} sets para alcanzar tu objetivo.
+                </p>
             </div>
         </div>
     );

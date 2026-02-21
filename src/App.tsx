@@ -43,6 +43,7 @@ function App() {
             <HomeView
               stats={workoutStats}
               weightTrend={weightTrend}
+              weightLogs={weightLogs}
               hasActiveSession={Boolean(session)}
               onStartSession={startSession}
               onFinishSession={finishSession}
