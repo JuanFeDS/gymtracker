@@ -22,11 +22,12 @@ const WorkoutView: React.FC<WorkoutViewProps> = ({ session, recentSessions, onSt
     if (!session) {
         return (
             <>
-            <div className="glass" style={{ padding: 'var(--spacing-lg)', borderRadius: 'var(--radius-lg)' }}>
+            <div className="glass animate-fade-scale" style={{ padding: 'var(--spacing-lg)', borderRadius: 'var(--radius-lg)' }}>
                 <h3 style={{ marginBottom: 'var(--spacing-md)' }}>Sin entrenamiento activo</h3>
                 <p style={{ marginBottom: 'var(--spacing-lg)' }}>Prepárate y comienza tu próximo workout.</p>
                 <button
                     onClick={onStart}
+                    className="animate-fade-in"
                     style={{
                         width: '100%',
                         padding: 'var(--spacing-md)',
@@ -46,11 +47,12 @@ const WorkoutView: React.FC<WorkoutViewProps> = ({ session, recentSessions, onSt
                             <h4 style={{ margin: 0 }}>Últimas sesiones</h4>
                             <span style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>3 más recientes</span>
                         </div>
-                        <div className="flex flex-col gap-sm">
+                        <div className="flex flex-col gap-sm stagger-enter">
                             {recentSessions.map(recent => (
                                 <button
                                     key={recent.id}
                                     onClick={() => setSelectedSession(recent)}
+                                    className="animate-fade-scale"
                                     style={{
                                         border: 'none',
                                         textAlign: 'left',
