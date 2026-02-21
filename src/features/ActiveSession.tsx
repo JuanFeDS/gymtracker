@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { createPortal } from 'react-dom';
 import type { WorkoutSession, LoggedExercise, SetLog, Exercise } from '../types';
 import { EXERCISE_DATABASE } from '../types';
 
@@ -59,7 +60,7 @@ const ActiveSession: React.FC<ActiveSessionProps> = ({ session, onUpdate, onFini
     };
 
     return (
-        <div className="flex flex-col gap-lg">
+        <div className="flex flex-col gap-xl">
             <div className="flex justify-between items-center">
                 <h2 style={{ fontSize: '1.5rem' }}>Active Session</h2>
                 <button
@@ -189,52 +190,33 @@ const ActiveSession: React.FC<ActiveSessionProps> = ({ session, onUpdate, onFini
                 </button>
             </div>
 
-            {showExercisePicker && (
-                <div style={{
-                    position: 'fixed',
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    background: 'rgba(0,0,0,0.8)',
-                    display: 'flex',
-                    alignItems: 'flex-end',
-                    zIndex: 200
-                }}>
-                    <div className="glass animate-fade-in" style={{
-                        width: '100%',
-                        maxHeight: '80%',
-                        background: 'var(--bg-color)',
-                        borderRadius: '24px 24px 0 0',
-                        padding: 'var(--spacing-lg)',
-                        overflowY: 'auto',
-                        border: '1px solid var(--border)'
-                    }}>
-                        <div className="flex justify-between items-center" style={{ marginBottom: 'var(--spacing-lg)' }}>
+            {showExercisePicker && createPortal(
+                <div className="modal-overlay">
+                    <div className="modal-sheet animate-slide-up">
+                        <div className="modal-sheet-handle" />
+
+                        <div className="modal-sheet-header">
                             <h3>Select Exercise</h3>
-                            <button onClick={() => setShowExercisePicker(false)} style={{ color: 'var(--text-muted)' }}>Close</button>
+                            <button className="modal-close-btn" onClick={() => setShowExercisePicker(false)}>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18" /><path d="m6 6 12 12" /></svg>
+                            </button>
                         </div>
 
-                        <div className="flex flex-col gap-sm">
+                        <div className="modal-scroll-area flex flex-col gap-md">
                             {EXERCISE_DATABASE.map(ex => (
                                 <button
                                     key={ex.id}
                                     onClick={() => addExercise(ex)}
-                                    className="flex flex-col gap-xs"
-                                    style={{
-                                        padding: 'var(--spacing-md)',
-                                        background: 'var(--surface-color)',
-                                        borderRadius: 'var(--radius-md)',
-                                        textAlign: 'left'
-                                    }}
+                                    className="exercise-card"
                                 >
-                                    <span style={{ fontWeight: 600 }}>{ex.name}</span>
-                                    <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>{ex.category}</span>
+                                    <span className="exercise-card-name">{ex.name}</span>
+                                    <span className="exercise-card-category">{ex.category}</span>
                                 </button>
                             ))}
                         </div>
                     </div>
-                </div>
+                </div>,
+                document.body
             )}
         </div>
     );
