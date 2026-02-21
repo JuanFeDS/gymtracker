@@ -3,6 +3,38 @@ import { createPortal } from 'react-dom';
 import type { WorkoutSession, LoggedExercise, SetLog, Exercise } from '../types';
 import { EXERCISE_DATABASE } from '../types';
 
+const NumberStepper = ({ value, onChange, min = 0, step = 1 }: { value: number, onChange: (v: number) => void, min?: number, step?: number }) => (
+    <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        background: 'var(--surface-color)',
+        border: '1px solid var(--border)',
+        borderRadius: 'var(--radius-sm)',
+        height: '42px',
+        width: '100%',
+        minWidth: 0
+    }}>
+        <button
+            onClick={() => onChange(Math.max(min, (value || 0) - step))}
+            style={{ width: '32px', height: '100%', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem', flexShrink: 0 }}
+        >-</button>
+        <input
+            type="number"
+            value={value || ''}
+            onChange={(e) => onChange(Number(e.target.value))}
+            placeholder="0"
+            style={{
+                flex: 1, minWidth: 0, textAlign: 'center', background: 'transparent', outline: 'none',
+                border: 'none', color: 'var(--text-main)', fontSize: '1.1rem', fontWeight: 700, padding: 0
+            }}
+        />
+        <button
+            onClick={() => onChange((value || 0) + step)}
+            style={{ width: '32px', height: '100%', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem', flexShrink: 0 }}
+        >+</button>
+    </div>
+);
+
 interface ActiveSessionProps {
     session: WorkoutSession;
     onUpdate: (session: WorkoutSession) => void;
@@ -11,6 +43,7 @@ interface ActiveSessionProps {
 
 const ActiveSession: React.FC<ActiveSessionProps> = ({ session, onUpdate, onFinish }) => {
     const [showExercisePicker, setShowExercisePicker] = useState(false);
+    const [unit, setUnit] = useState<'KG' | 'LB'>('KG');
 
     const addExercise = (exercise: Exercise) => {
         const newLoggedExercise: LoggedExercise = {
@@ -83,15 +116,37 @@ const ActiveSession: React.FC<ActiveSessionProps> = ({ session, onUpdate, onFini
                         <h3 style={{ marginBottom: 'var(--spacing-sm)', color: 'var(--primary)' }}>{ex.name}</h3>
 
                         <div className="flex flex-col gap-sm">
-                            <div className="flex gap-sm items-center" style={{ fontSize: '0.8rem', color: 'var(--text-muted)', paddingLeft: '40px' }}>
-                                <span style={{ flex: 1 }}>SET</span>
-                                <span style={{ width: '60px', textAlign: 'center' }}>KG</span>
-                                <span style={{ width: '60px', textAlign: 'center' }}>REPS</span>
-                                <span style={{ width: '30px' }}></span>
+                            <div style={{
+                                display: 'grid', gridTemplateColumns: '32px 1fr 1fr 32px', gap: 'var(--spacing-sm)',
+                                alignItems: 'center', fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '4px'
+                            }}>
+                                <span style={{ textAlign: 'center', fontWeight: '600' }}>SET</span>
+                                <button
+                                    onClick={() => setUnit(unit === 'KG' ? 'LB' : 'KG')}
+                                    style={{
+                                        width: '100%',
+                                        textAlign: 'center',
+                                        background: 'transparent',
+                                        padding: '4px 0',
+                                        color: 'var(--primary)',
+                                        fontWeight: 800,
+                                        border: '1px solid var(--border)',
+                                        borderRadius: 'var(--radius-sm)',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        gap: '4px'
+                                    }}
+                                >
+                                    {unit}
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6" /></svg>
+                                </button>
+                                <span style={{ textAlign: 'center', fontWeight: '600' }}>REPS</span>
+                                <span></span>
                             </div>
 
                             {ex.sets.map((set, index) => (
-                                <div key={set.id} className="flex gap-sm items-center">
+                                <div key={set.id} style={{ display: 'grid', gridTemplateColumns: '32px 1fr 1fr 32px', gap: 'var(--spacing-sm)', alignItems: 'center' }}>
                                     <div style={{
                                         width: '32px',
                                         height: '32px',
@@ -108,51 +163,36 @@ const ActiveSession: React.FC<ActiveSessionProps> = ({ session, onUpdate, onFini
                                         {index + 1}
                                     </div>
 
-                                    <input
-                                        type="number"
-                                        value={set.weight || ''}
-                                        onChange={(e) => updateSet(ex.id, set.id, { weight: Number(e.target.value) })}
-                                        placeholder="0"
-                                        style={{
-                                            flex: 1,
-                                            background: 'var(--surface-color)',
-                                            border: '1px solid var(--border)',
-                                            borderRadius: 'var(--radius-sm)',
-                                            padding: '8px',
-                                            color: 'var(--text-main)',
-                                            textAlign: 'center'
-                                        }}
+                                    <NumberStepper
+                                        value={set.weight}
+                                        onChange={(val) => updateSet(ex.id, set.id, { weight: val })}
+                                        step={0.5}
+                                        min={0}
                                     />
 
-                                    <input
-                                        type="number"
-                                        value={set.reps || ''}
-                                        onChange={(e) => updateSet(ex.id, set.id, { reps: Number(e.target.value) })}
-                                        placeholder="0"
-                                        style={{
-                                            flex: 1,
-                                            background: 'var(--surface-color)',
-                                            border: '1px solid var(--border)',
-                                            borderRadius: 'var(--radius-sm)',
-                                            padding: '8px',
-                                            color: 'var(--text-main)',
-                                            textAlign: 'center'
-                                        }}
+                                    <NumberStepper
+                                        value={set.reps}
+                                        onChange={(val) => updateSet(ex.id, set.id, { reps: val })}
+                                        step={1}
+                                        min={0}
                                     />
 
                                     <button
                                         onClick={() => updateSet(ex.id, set.id, { completed: !set.completed })}
                                         style={{
                                             width: '32px',
-                                            height: '32px',
+                                            height: '42px',
                                             borderRadius: 'var(--radius-sm)',
-                                            background: set.completed ? 'var(--primary)' : 'var(--border)',
+                                            background: set.completed ? 'var(--primary)' : 'var(--surface-color)',
                                             display: 'flex',
                                             alignItems: 'center',
-                                            justifyContent: 'center'
+                                            justifyContent: 'center',
+                                            border: '1px solid var(--border)',
+                                            color: set.completed ? 'black' : 'var(--text-muted)',
+                                            transition: 'var(--transition-fast)'
                                         }}
                                     >
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={set.completed ? "black" : "white"} strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={set.completed ? "black" : "var(--text-muted)"} strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
                                     </button>
                                 </div>
                             ))}
