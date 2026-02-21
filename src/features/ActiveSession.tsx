@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { createPortal } from 'react-dom';
 import type { WorkoutSession, LoggedExercise, SetLog, Exercise } from '../types';
 import { EXERCISE_DATABASE } from '../types';
+import ExercisePickerModal from '../components/ExercisePickerModal';
 
 const NumberStepper = ({ value, onChange, min = 0, step = 1 }: { value: number, onChange: (v: number) => void, min?: number, step?: number }) => (
     <div style={{
@@ -230,34 +230,12 @@ const ActiveSession: React.FC<ActiveSessionProps> = ({ session, onUpdate, onFini
                 </button>
             </div>
 
-            {showExercisePicker && createPortal(
-                <div className="modal-overlay">
-                    <div className="modal-sheet animate-slide-up">
-                        <div className="modal-sheet-handle" />
-
-                        <div className="modal-sheet-header">
-                            <h3>Select Exercise</h3>
-                            <button className="modal-close-btn" onClick={() => setShowExercisePicker(false)}>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18" /><path d="m6 6 12 12" /></svg>
-                            </button>
-                        </div>
-
-                        <div className="modal-scroll-area flex flex-col gap-md">
-                            {EXERCISE_DATABASE.map(ex => (
-                                <button
-                                    key={ex.id}
-                                    onClick={() => addExercise(ex)}
-                                    className="exercise-card"
-                                >
-                                    <span className="exercise-card-name">{ex.name}</span>
-                                    <span className="exercise-card-category">{ex.category}</span>
-                                </button>
-                            ))}
-                        </div>
-                    </div>
-                </div>,
-                document.body
-            )}
+            <ExercisePickerModal
+                open={showExercisePicker}
+                exercises={EXERCISE_DATABASE}
+                onSelect={addExercise}
+                onClose={() => setShowExercisePicker(false)}
+            />
         </div>
     );
 };

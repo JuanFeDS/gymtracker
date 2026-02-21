@@ -2,11 +2,12 @@ import { useState, useEffect } from 'react';
 import BottomNav from './BottomNav';
 
 interface LayoutProps {
-    children: (activeTab: string) => React.ReactNode;
+    activeTab: string;
+    onTabChange: (tab: string) => void;
+    children: React.ReactNode;
 }
 
-const Layout: React.FC<LayoutProps> = ({ children }) => {
-    const [activeTab, setActiveTab] = useState('workout');
+const Layout: React.FC<LayoutProps> = ({ activeTab, onTabChange, children }) => {
     const [theme, setTheme] = useState<'light' | 'dark'>(() => {
         return (localStorage.getItem('theme') as 'light' | 'dark') || 'dark';
     });
@@ -53,11 +54,11 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 width: '100%'
             }}>
                 <div className="animate-fade-in" key={activeTab}>
-                    {children(activeTab)}
+                    {children}
                 </div>
             </main>
 
-            <BottomNav activeTab={activeTab} setActiveTab={setActiveTab} />
+            <BottomNav activeTab={activeTab} setActiveTab={onTabChange} />
 
             {/* Background Glows for Premium Look */}
             <div style={{

@@ -258,23 +258,52 @@ button:active {
   padding: var(--spacing-lg);
   overflow-y: auto;
   flex: 1;
+  margin-top: var(--spacing-md);
   /* Massive padding so the last elements easily clear iOS/Android hone bars */
   padding-bottom: calc(env(safe-area-inset-bottom, 20px) + 120px);
 }
 
+.modal-filter-row {
+  padding: var(--spacing-md) var(--spacing-lg) var(--spacing-md);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+}
+
+.filter-chip {
+  padding: 0.4rem 0.9rem;
+  border-radius: var(--radius-full);
+  background: var(--surface-hover);
+  border: 1px solid transparent;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.filter-chip--active {
+  background: hsla(190, 100%, 50%, 0.1);
+  color: var(--primary);
+  border-color: hsla(190, 100%, 50%, 0.4);
+}
+
+.exercise-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: var(--spacing-lg);
+}
+
 .exercise-card {
   width: 100%;
-  padding: var(--spacing-lg);
+  padding: var(--spacing-sm);
   background: var(--surface-color);
   border-radius: var(--radius-lg);
   text-align: left;
   border: 1px solid var(--border);
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-xs);
+  gap: var(--spacing-sm);
   cursor: pointer;
   transition: transform 0.2s ease, background 0.2s ease;
-  margin-bottom: var(--spacing-md);
 }
 
 .exercise-card:active {
@@ -282,14 +311,30 @@ button:active {
   background: var(--surface-hover);
 }
 
+.exercise-card-media {
+  width: 100%;
+  padding-top: 60%;
+  border-radius: calc(var(--radius-lg) - 4px);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  filter: saturate(0.9);
+}
+
+.exercise-card-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
 .exercise-card-name {
   font-weight: 800;
-  font-size: 1.25rem;
+  font-size: 1.1rem;
   color: var(--text-main);
 }
 
 .exercise-card-category {
-  font-size: 0.95rem;
+  font-size: 0.8rem;
   color: var(--primary);
   font-weight: 700;
   text-transform: uppercase;
