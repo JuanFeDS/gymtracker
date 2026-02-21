@@ -5,9 +5,10 @@ interface WeightViewProps {
     newValue: string;
     onChange: (value: string) => void;
     onSubmit: () => void;
+    loading?: boolean;
 }
 
-const WeightView: React.FC<WeightViewProps> = ({ logs, newValue, onChange, onSubmit }) => (
+const WeightView: React.FC<WeightViewProps> = ({ logs, newValue, onChange, onSubmit, loading = false }) => (
     <div className="flex flex-col gap-md">
         <div className="glass" style={{ padding: 'var(--spacing-lg)', borderRadius: 'var(--radius-lg)' }}>
             <h3 style={{ marginBottom: 'var(--spacing-md)' }}>Registrar peso</h3>
@@ -28,15 +29,16 @@ const WeightView: React.FC<WeightViewProps> = ({ logs, newValue, onChange, onSub
                 />
                 <button
                     onClick={onSubmit}
+                    disabled={loading}
                     style={{
                         padding: '0 var(--spacing-lg)',
-                        background: 'var(--primary)',
-                        color: 'black',
+                        background: loading ? 'var(--border)' : 'var(--primary)',
+                        color: loading ? 'var(--text-muted)' : 'black',
                         fontWeight: 700,
                         borderRadius: 'var(--radius-md)'
                     }}
                 >
-                    GUARDAR
+                    {loading ? 'Guardando...' : 'Guardar'}
                 </button>
             </div>
         </div>

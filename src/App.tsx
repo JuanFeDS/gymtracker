@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import Layout from './components/Layout';
 import PageHeader from './components/PageHeader';
 import WorkoutView from './views/WorkoutView';
@@ -15,6 +15,8 @@ import { useWeightTrend } from './hooks/useWeightTrend';
 import { useGamificationStats } from './hooks/useGamificationStats';
 import { useSessionHistory } from './hooks/useSessionHistory';
 import { useUserProfile } from './hooks/useUserProfile';
+import { saveCompletedSession } from './services/sessionService';
+import type { CompletedSession } from './types';
 
 const TAB_COPY: Record<string, { subtitle: string; title: string }> = {
   home: { subtitle: 'Resumen general', title: 'Dashboard' },
@@ -26,12 +28,18 @@ const TAB_COPY: Record<string, { subtitle: string; title: string }> = {
 
 function App() {
   const [activeTab, setActiveTab] = useState('home');
-  const { profile, saveProfile, updateProfile, logout } = useUserProfile();
-  const { sessions, addSession } = useSessionHistory();
-  const { session, startSession, finishSession, updateSession } = useWorkoutSession(addSession);
-  const { logs: weightLogs, addLog } = useWeightLogs();
+  const { profile, saveProfile, login, updateProfile, logout, syncing, authError } = useUserProfile();
+  const { sessions, addSession } = useSessionHistory(profile?.id);
+  const handleSessionComplete = useCallback((completedSession: CompletedSession) => {
+    addSession(completedSession);
+    if (profile?.id) {
+      saveCompletedSession(profile.id, completedSession);
+    }
+  }, [addSession, profile?.id]);
+  const { session, startSession, finishSession, updateSession } = useWorkoutSession(handleSessionComplete);
+  const { logs: weightLogs, addLog, loading: weightLoading } = useWeightLogs(profile?.id);
   const [newWeight, setNewWeight] = useState('');
-  const gamification = useGamificationStats();
+  const gamification = useGamificationStats(profile?.id);
 
   const workoutStats = useWorkoutStats(session);
   const weightTrend = useWeightTrend(weightLogs);
@@ -46,7 +54,14 @@ function App() {
   };
 
   if (!profile) {
-    return <OnboardingView onSubmit={saveProfile} />;
+    return (
+      <OnboardingView
+        onSubmit={saveProfile}
+        onLogin={login}
+        syncing={syncing}
+        authError={authError}
+      />
+    );
   }
 
   return (
@@ -80,6 +95,7 @@ function App() {
               newValue={newWeight}
               onChange={setNewWeight}
               onSubmit={handleAddWeight}
+              loading={weightLoading}
             />
           )}
 
@@ -88,7 +104,7 @@ function App() {
           )}
 
           {activeTab === 'gamification' && (
-            <GamificationView stats={gamification.stats} />
+            <GamificationView stats={gamification.stats} loading={gamification.loading} />
           )}
 
           {activeTab === 'profile' && profile && (

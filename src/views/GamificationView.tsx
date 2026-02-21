@@ -2,13 +2,19 @@ import type { GamificationStats } from '../types';
 
 interface GamificationViewProps {
     stats: GamificationStats;
+    loading?: boolean;
 }
 
-const GamificationView: React.FC<GamificationViewProps> = ({ stats }) => {
+const GamificationView: React.FC<GamificationViewProps> = ({ stats, loading = false }) => {
     const xpProgress = Math.min(100, Math.round((stats.xp / stats.nextLevelXp) * 100));
 
     return (
         <div className="gamification-grid">
+            {loading && (
+                <div className="glass" style={{ padding: 'var(--spacing-md)', borderRadius: 'var(--radius-md)', textAlign: 'center' }}>
+                    <p>Cargando progreso...</p>
+                </div>
+            )}
             <div className="gamification-hero">
                 <div className="streak-pill">
                     <div className="streak-icon">🔥</div>
