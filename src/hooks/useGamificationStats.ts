@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import type { GamificationStats } from '../types';
 import { fetchGamificationSnapshot } from '../services/gamificationService';
+import { assignInitialMissions } from '../services/missionService';
 
 const DEFAULT_STATS: GamificationStats = {
     xp: 0,
@@ -20,6 +21,7 @@ export const useGamificationStats = (userId?: string) => {
 
         (async () => {
             setLoading(true);
+            await assignInitialMissions(userId);
             const snapshot = await fetchGamificationSnapshot(userId);
             if (!cancelled) {
                 setStats(snapshot);

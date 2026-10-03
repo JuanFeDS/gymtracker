@@ -62,6 +62,7 @@ export type UserProfile = {
     pin: string;
     goal?: 'fuerza' | 'hipertrofia' | 'resistencia';
     avatarColor: string;
+    weeklyGoal?: number;
 };
 
 export type Exercise = {
@@ -69,6 +70,9 @@ export type Exercise = {
     name: string;
     category: string;
     image: string;
+    muscleGroup?: string;
+    equipment?: string;
+    difficulty?: string;
 };
 
 export const EXERCISE_DATABASE: Exercise[] = [

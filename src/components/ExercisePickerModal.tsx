@@ -62,8 +62,32 @@ const ExercisePickerModal: React.FC<ExercisePickerModalProps> = ({ open, exercis
                         >
                             <div
                                 className="exercise-card-media"
-                                style={{ backgroundImage: `url(${exercise.image})` }}
-                            />
+                                style={{ 
+                                    backgroundImage: `url(${exercise.image})`,
+                                    backgroundColor: 'var(--surface-hover)'
+                                }}
+                            >
+                                <img 
+                                    src={exercise.image} 
+                                    alt={exercise.name}
+                                    loading="lazy"
+                                    style={{ display: 'none' }}
+                                    onError={(e) => {
+                                        console.error('Error cargando imagen:', exercise.image, 'para ejercicio:', exercise.name);
+                                        const target = e.currentTarget.parentElement;
+                                        if (target) {
+                                            target.style.backgroundImage = 'none';
+                                            target.style.display = 'flex';
+                                            target.style.alignItems = 'center';
+                                            target.style.justifyContent = 'center';
+                                            target.innerHTML = '<span style="font-size: 48px; opacity: 0.3;">💪</span>';
+                                        }
+                                    }}
+                                    onLoad={() => {
+                                        console.log('Imagen cargada exitosamente:', exercise.image);
+                                    }}
+                                />
+                            </div>
                             <div className="exercise-card-info">
                                 <span className="exercise-card-category">{exercise.category}</span>
                                 <span className="exercise-card-name">{exercise.name}</span>

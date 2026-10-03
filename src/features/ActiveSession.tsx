@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import type { WorkoutSession, LoggedExercise, SetLog, Exercise } from '../types';
-import { EXERCISE_DATABASE } from '../types';
+import { useExercises } from '../hooks/useExercises';
 import ExercisePickerModal from '../components/ExercisePickerModal';
 
 const NumberStepper = ({ value, onChange, min = 0, step = 1 }: { value: number, onChange: (v: number) => void, min?: number, step?: number }) => (
@@ -44,6 +44,7 @@ interface ActiveSessionProps {
 const ActiveSession: React.FC<ActiveSessionProps> = ({ session, onUpdate, onFinish }) => {
     const [showExercisePicker, setShowExercisePicker] = useState(false);
     const [unit, setUnit] = useState<'KG' | 'LB'>('KG');
+    const { exercises, loading: loadingExercises } = useExercises();
 
     const addExercise = (exercise: Exercise) => {
         const newLoggedExercise: LoggedExercise = {
@@ -201,12 +202,24 @@ const ActiveSession: React.FC<ActiveSessionProps> = ({ session, onUpdate, onFini
                                 onClick={() => addSet(ex.id)}
                                 style={{
                                     width: '100%',
-                                    padding: '8px',
+                                    padding: '10px',
                                     background: 'var(--surface-hover)',
-                                    borderRadius: 'var(--radius-sm)',
+                                    border: '1px dashed var(--primary)',
+                                    borderRadius: 'var(--radius-md)',
                                     marginTop: 'var(--spacing-xs)',
-                                    fontSize: '0.8rem',
-                                    fontWeight: 600
+                                    fontSize: '13px',
+                                    fontWeight: 600,
+                                    cursor: 'pointer',
+                                    color: 'var(--primary)',
+                                    transition: 'all 0.2s ease'
+                                }}
+                                onMouseEnter={(e) => {
+                                    e.currentTarget.style.background = 'rgba(64, 224, 208, 0.1)';
+                                    e.currentTarget.style.borderStyle = 'solid';
+                                }}
+                                onMouseLeave={(e) => {
+                                    e.currentTarget.style.background = 'var(--surface-hover)';
+                                    e.currentTarget.style.borderStyle = 'dashed';
                                 }}
                             >
                                 + ADD SET
@@ -232,7 +245,7 @@ const ActiveSession: React.FC<ActiveSessionProps> = ({ session, onUpdate, onFini
 
             <ExercisePickerModal
                 open={showExercisePicker}
-                exercises={EXERCISE_DATABASE}
+                exercises={loadingExercises ? [] : exercises}
                 onSelect={addExercise}
                 onClose={() => setShowExercisePicker(false)}
             />

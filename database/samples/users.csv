@@ -1,0 +1,4 @@
+user_id,user_email,username,password,user_goal,avatar_color,created_at,updated_at
+3fa85f64-5717-4562-b3fc-2c963f66afa6,athlete@example.com,iron_jmart,pin-1234,hipertrofia,#FF6B6B,2026-02-01,2026-02-21
+4b2d1c70-8bf6-4c0a-803f-3ba4c1da1234,strong.auri@example.com,auri_lifts,pin-5678,fuerza,#FFD166,2026-01-28,2026-02-18
+5c6eb1a2-9d8f-4a7c-b0a2-6b8c9d0e5678,resiste.nahuel@example.com,nahuel_engine,pin-8080,resistencia,#06D6A0,2026-02-05,2026-02-20

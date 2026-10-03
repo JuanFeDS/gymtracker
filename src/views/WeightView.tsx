@@ -1,4 +1,6 @@
+import { useState } from 'react';
 import type { WeightLog } from '../types';
+import ConfirmDialog from '../components/ConfirmDialog';
 
 interface WeightViewProps {
     logs: WeightLog[];
@@ -9,7 +11,10 @@ interface WeightViewProps {
     loading?: boolean;
 }
 
-const WeightView: React.FC<WeightViewProps> = ({ logs, newValue, onChange, onSubmit, onDelete, loading = false }) => (
+const WeightView: React.FC<WeightViewProps> = ({ logs, newValue, onChange, onSubmit, onDelete, loading = false }) => {
+    const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
+
+    return (
     <div className="flex flex-col gap-md">
         <div className="glass" style={{ padding: 'var(--spacing-lg)', borderRadius: 'var(--radius-lg)' }}>
             <h3 style={{ marginBottom: 'var(--spacing-md)' }}>Registrar peso</h3>
@@ -56,7 +61,7 @@ const WeightView: React.FC<WeightViewProps> = ({ logs, newValue, onChange, onSub
                         <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>{log.date}</span>
                     </div>
                     <button
-                        onClick={() => onDelete(log.id)}
+                        onClick={() => setDeleteConfirm(log.id)}
                         disabled={loading}
                         style={{
                             padding: '0 var(--spacing-md)',
@@ -65,7 +70,17 @@ const WeightView: React.FC<WeightViewProps> = ({ logs, newValue, onChange, onSub
                             background: 'transparent',
                             border: '1px solid var(--border)',
                             color: 'var(--text-muted)',
-                            fontSize: '0.8rem'
+                            fontSize: '0.8rem',
+                            cursor: 'pointer',
+                            transition: 'all 0.2s ease'
+                        }}
+                        onMouseEnter={(e) => {
+                            e.currentTarget.style.borderColor = '#ef4444';
+                            e.currentTarget.style.color = '#ef4444';
+                        }}
+                        onMouseLeave={(e) => {
+                            e.currentTarget.style.borderColor = 'var(--border)';
+                            e.currentTarget.style.color = 'var(--text-muted)';
                         }}
                     >
                         Eliminar
@@ -74,7 +89,23 @@ const WeightView: React.FC<WeightViewProps> = ({ logs, newValue, onChange, onSub
             ))}
             {logs.length === 0 && <p style={{ textAlign: 'center', opacity: 0.5 }}>Aún no tienes registros</p>}
         </div>
+
+        <ConfirmDialog
+            open={deleteConfirm !== null}
+            onClose={() => setDeleteConfirm(null)}
+            onConfirm={() => {
+                if (deleteConfirm) {
+                    onDelete(deleteConfirm);
+                }
+            }}
+            title="Eliminar Registro"
+            message="¿Estás seguro de que deseas eliminar este registro de peso? Esta acción no se puede deshacer."
+            confirmText="Eliminar"
+            cancelText="Cancelar"
+            danger={true}
+        />
     </div>
-);
+    );
+};
 
 export default WeightView;

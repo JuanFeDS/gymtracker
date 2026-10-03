@@ -3,33 +3,31 @@ import { supabase } from './supabaseClient';
 
 const toISO = (timestamp: number) => new Date(timestamp).toISOString();
 
-const rehydrateExercise = (row: any): LoggedExercise => {
-    const setsCount = Math.max(1, Number(row.sets ?? 1));
-    const totalReps = Number(row.repetitions ?? 0);
-    const avgReps = setsCount ? Math.round(totalReps / setsCount) || totalReps : totalReps;
-    const avgWeight = Number(row.weight ?? 0);
-
-    const sets: SetLog[] = Array.from({ length: setsCount }, (_, idx) => ({
-        id: `${row.session_id}-${row.exercise_name ?? 'exercise'}-${idx}`,
-        reps: avgReps,
-        weight: avgWeight,
-        completed: true
+const rehydrateExercise = (row: Record<string, unknown>): LoggedExercise => {
+    const setsDetail = row.sets_detail as Array<Record<string, unknown>> | undefined;
+    
+    const sets: SetLog[] = (setsDetail ?? []).map((set, idx) => ({
+        id: set.id as string || `${row.session_exercise_id}-set-${idx}`,
+        reps: Number(set.reps ?? 0),
+        weight: Number(set.weight ?? 0),
+        rpe: set.rpe ? Number(set.rpe) : undefined,
+        completed: Boolean(set.completed ?? true)
     }));
 
     return {
-        id: row.session_exercise_id || row.id,
-        exerciseId: row.exercise_id ?? '',
-        name: row.exercise_name ?? 'Ejercicio',
-        sets
+        id: (row.session_exercise_id || row.id) as string,
+        exerciseId: (row.exercise_id as string) ?? '',
+        name: (row.exercise_name as string) ?? 'Ejercicio',
+        sets: sets.length > 0 ? sets : [{ id: 'default', reps: 0, weight: 0, completed: false }]
     };
 };
 
-const buildCompletedSession = (sessionRow: any, exercises: LoggedExercise[]): CompletedSession => {
-    const start = sessionRow.started_at ? new Date(sessionRow.started_at).getTime() : Date.now();
-    const end = sessionRow.ended_at ? new Date(sessionRow.ended_at).getTime() : start;
+const buildCompletedSession = (sessionRow: Record<string, unknown>, exercises: LoggedExercise[]): CompletedSession => {
+    const start = sessionRow.started_at ? new Date(sessionRow.started_at as string).getTime() : Date.now();
+    const end = sessionRow.ended_at ? new Date(sessionRow.ended_at as string).getTime() : start;
 
     return {
-        id: sessionRow.session_id,
+        id: sessionRow.session_id as string,
         startTime: start,
         endTime: end,
         exercises,
@@ -77,18 +75,20 @@ export async function fetchRemoteSessions(userId: string): Promise<CompletedSess
 }
 
 const summarizeExercise = (sessionId: string, exercise: LoggedExercise, index: number) => {
-    const totalSets = exercise.sets.length || 1;
-    const totalReps = exercise.sets.reduce((acc, set) => acc + (set.reps ?? 0), 0);
-    const avgWeight = totalSets ? exercise.sets.reduce((acc, set) => acc + (set.weight ?? 0), 0) / totalSets : 0;
+    const setsDetail = exercise.sets.map(set => ({
+        id: set.id,
+        reps: set.reps,
+        weight: set.weight,
+        completed: set.completed,
+        rpe: set.rpe
+    }));
 
     return {
         session_id: sessionId,
         exercise_id: exercise.exerciseId || null,
         exercise_name: exercise.name,
         category: null,
-        sets: totalSets,
-        repetitions: totalReps,
-        weight: avgWeight,
+        sets_detail: setsDetail,
         order_index: index
     };
 };
@@ -114,7 +114,14 @@ export async function saveCompletedSession(userId: string, session: CompletedSes
 
     if (!session.exercises.length) return;
 
-    await supabase.from('session_exercises').delete().eq('session_id', session.id);
+    const { error: deleteError } = await supabase
+        .from('session_exercises')
+        .delete()
+        .eq('session_id', session.id);
+
+    if (deleteError) {
+        console.error('Error al eliminar ejercicios previos:', deleteError.message);
+    }
 
     const exerciseRows = session.exercises.map((exercise, index) =>
         summarizeExercise(session.id, exercise, index)

@@ -9,18 +9,22 @@ const computeLevelData = (xp: number) => {
     return { level, nextLevelXp };
 };
 
-const mapMission = (row: any): GamificationMission => ({
-    id: row?.mission?.mission_id ?? row.user_mission_id,
-    title: row?.mission?.title ?? 'Misión',
-    description: row?.mission?.description ?? '',
-    progress: Number(row?.progress ?? 0),
-    goal: Number(row?.mission?.goal_value ?? 1) || 1,
-    rewardXp: Number(row?.mission?.reward_xp ?? 0)
-});
+const mapMission = (row: Record<string, unknown>): GamificationMission => {
+    const mission = row?.mission as Record<string, unknown> | undefined;
+    return {
+        id: (mission?.mission_id ?? row.user_mission_id) as string,
+        title: (mission?.title as string) ?? 'Misión',
+        description: (mission?.description as string) ?? '',
+        progress: Number(row?.progress ?? 0),
+        goal: Number(mission?.goal_value ?? 1) || 1,
+        rewardXp: Number(mission?.reward_xp ?? 0)
+    };
+};
 
-const calculateXp = (rows: any[]) => rows.reduce((acc, row) => {
+const calculateXp = (rows: Record<string, unknown>[]) => rows.reduce((acc, row) => {
     const completed = Boolean(row?.completed);
-    const reward = Number(row?.mission?.reward_xp ?? 0);
+    const mission = row?.mission as Record<string, unknown> | undefined;
+    const reward = Number(mission?.reward_xp ?? 0);
     return acc + (completed ? reward : 0);
 }, 0);
 

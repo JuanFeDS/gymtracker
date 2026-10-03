@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useEffect, useState } from 'react';
 import type { WorkoutSession } from '../types';
 
 const getSetVolume = (reps: number, weight: number) => reps * weight;
@@ -11,6 +11,15 @@ export type WorkoutStats = {
 };
 
 export const useWorkoutStats = (session: WorkoutSession | null): WorkoutStats => {
+    const [now, setNow] = useState(() => Date.now());
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setNow(Date.now());
+        }, 1000);
+        return () => clearInterval(interval);
+    }, []);
+
     return useMemo(() => {
         if (!session) {
             return {
@@ -21,7 +30,6 @@ export const useWorkoutStats = (session: WorkoutSession | null): WorkoutStats =>
             };
         }
 
-        const now = Date.now();
         const duration = Math.max(1, Math.floor((now - session.startTime) / 60000));
 
         const { totalSets, totalVolume } = session.exercises.reduce((acc, exercise) => {
@@ -36,5 +44,5 @@ export const useWorkoutStats = (session: WorkoutSession | null): WorkoutStats =>
             exerciseCount: session.exercises.length,
             durationMinutes: duration
         };
-    }, [session]);
+    }, [session, now]);
 };

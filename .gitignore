@@ -3,7 +3,9 @@
 
 # Directories
 docs/
-database/
+# database/
+!database/seed/
+!database/migrations/
 
 # Logs
 logs

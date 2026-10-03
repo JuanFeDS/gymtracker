@@ -1,0 +1,41 @@
+mission_id,mission_name,description,mission_type,goal_value,reward_xp,difficulty,category
+mis_001,Primer Paso,Completa tu primera sesión de entrenamiento,session_count,1,50,Principiante,Inicio
+mis_002,Guerrero Novato,Completa 5 sesiones de entrenamiento,session_count,5,100,Principiante,Progreso
+mis_003,Atleta Dedicado,Completa 10 sesiones de entrenamiento,session_count,10,200,Intermedio,Progreso
+mis_004,Maestro del Gimnasio,Completa 25 sesiones de entrenamiento,session_count,25,500,Avanzado,Progreso
+mis_005,Leyenda del Fitness,Completa 50 sesiones de entrenamiento,session_count,50,1000,Experto,Progreso
+mis_006,Centurión,Completa 100 sesiones de entrenamiento,session_count,100,2500,Experto,Progreso
+mis_007,Racha de Fuego,Entrena 3 días consecutivos,streak_days,3,75,Principiante,Consistencia
+mis_008,Semana Perfecta,Entrena 7 días consecutivos,streak_days,7,200,Intermedio,Consistencia
+mis_009,Mes Imparable,Entrena 30 días consecutivos,streak_days,30,1000,Avanzado,Consistencia
+mis_010,Volumen Inicial,Levanta 1000 kg de volumen total,total_volume,1000,100,Principiante,Volumen
+mis_011,Levantador Serio,Levanta 5000 kg de volumen total,total_volume,5000,250,Intermedio,Volumen
+mis_012,Bestia de Hierro,Levanta 10000 kg de volumen total,total_volume,10000,500,Avanzado,Volumen
+mis_013,Titán del Gimnasio,Levanta 25000 kg de volumen total,total_volume,25000,1500,Experto,Volumen
+mis_014,Hércules Moderno,Levanta 50000 kg de volumen total,total_volume,50000,3000,Experto,Volumen
+mis_015,Sets de Acero,Completa 100 sets totales,total_sets,100,75,Principiante,Sets
+mis_016,Máquina de Sets,Completa 500 sets totales,total_sets,500,300,Intermedio,Sets
+mis_017,Rey de los Sets,Completa 1000 sets totales,total_sets,1000,750,Avanzado,Sets
+mis_018,Maratón Fitness,Entrena durante 60 minutos en una sesión,session_duration,60,100,Intermedio,Duración
+mis_019,Ultra Resistencia,Entrena durante 90 minutos en una sesión,session_duration,90,200,Avanzado,Duración
+mis_020,Sesión Épica,Entrena durante 120 minutos en una sesión,session_duration,120,400,Experto,Duración
+mis_021,Explorador,Prueba 5 ejercicios diferentes,unique_exercises,5,50,Principiante,Variedad
+mis_022,Versátil,Prueba 15 ejercicios diferentes,unique_exercises,15,150,Intermedio,Variedad
+mis_023,Maestro de Ejercicios,Prueba 30 ejercicios diferentes,unique_exercises,30,400,Avanzado,Variedad
+mis_024,Enciclopedia Viviente,Prueba 50 ejercicios diferentes,unique_exercises,50,800,Experto,Variedad
+mis_025,Día de Pecho,Completa una sesión enfocada en pecho,muscle_group_focus,1,75,Principiante,Especialización
+mis_026,Día de Piernas,Completa una sesión enfocada en piernas,muscle_group_focus,1,75,Principiante,Especialización
+mis_027,Día de Espalda,Completa una sesión enfocada en espalda,muscle_group_focus,1,75,Principiante,Especialización
+mis_028,Día de Hombros,Completa una sesión enfocada en hombros,muscle_group_focus,1,75,Principiante,Especialización
+mis_029,Día de Brazos,Completa una sesión enfocada en brazos,muscle_group_focus,1,75,Principiante,Especialización
+mis_030,Guerrero del Core,Completa 10 sesiones con ejercicios de core,core_sessions,10,200,Intermedio,Core
+mis_031,Madrugador,Completa una sesión antes de las 8 AM,early_session,1,100,Intermedio,Horario
+mis_032,Búho Nocturno,Completa una sesión después de las 8 PM,late_session,1,100,Intermedio,Horario
+mis_033,Fin de Semana Activo,Entrena un sábado o domingo,weekend_session,1,50,Principiante,Horario
+mis_034,Progreso Medible,Registra tu peso corporal 5 veces,weight_logs,5,50,Principiante,Tracking
+mis_035,Obsesionado con Datos,Registra tu peso corporal 20 veces,weight_logs,20,150,Intermedio,Tracking
+mis_036,Científico del Fitness,Registra tu peso corporal 50 veces,weight_logs,50,400,Avanzado,Tracking
+mis_037,Transformación Inicial,Pierde o gana 2 kg,weight_change,2,200,Intermedio,Transformación
+mis_038,Gran Transformación,Pierde o gana 5 kg,weight_change,5,500,Avanzado,Transformación
+mis_039,Metamorfosis Completa,Pierde o gana 10 kg,weight_change,10,1200,Experto,Transformación
+mis_040,Perfeccionista,Completa una sesión con todos los sets planificados,perfect_session,1,100,Intermedio,Calidad

@@ -1,0 +1,4 @@
+mission_id,title,description,type,reward_xp,goal_value,created_at
+77777777-8888-9999-0000-111111111111,Completa 3 sesiones,Energiza la semana con tres entrenos completos,streak,300,3,2026-02-01
+88888888-9999-0000-1111-222222222222,Volumen pesado,Acumula al menos 40k kg de volumen en una semana,volumen,500,40000,2026-02-01
+99999999-aaaa-bbbb-cccc-333333333333,Marca personal en sentadilla,Persigue un nuevo PR superior a 150 kg,strength,450,150,2026-02-05

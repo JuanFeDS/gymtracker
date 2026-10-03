@@ -49,6 +49,7 @@ src/
 - Variables de entorno (archivo `.env`):
   - `VITE_SUPABASE_URL`
   - `VITE_SUPABASE_ANON_KEY`
+  - **Tip**: Copia `.env.example` a `.env` y completa con tus credenciales
 
 ## 🛠️ Configuración y uso
 
@@ -58,8 +59,11 @@ src/
    ```
 
 2. **Configurar entorno**
-   - Copia `.env.example` (si existe) o crea `.env` con las claves anteriores.
-   - Garantiza que las tablas `users`, `weights`, `sessions`, `session_exercises` usen UUID en `user_id`.
+   - Copia `.env.example` a `.env` y completa con tus credenciales de Supabase.
+   - Consulta `SUPABASE_SCHEMA.md` para crear las tablas de usuarios y datos.
+   - **IMPORTANTE**: Lee `DATABASE_SETUP.md` para importar datos predefinidos (ejercicios, misiones, etc.)
+   - Ejecuta `npm run db:migrate` para correr las migraciones SQL contra tu instancia usando TypeScript.
+   - Garantiza que las tablas `users`, `weights`, `sessions`, `session_exercises`, `user_missions`, `exercises`, `missions`, `muscle_groups`, `equipment` estén creadas correctamente.
 
 3. **Correr en desarrollo**
    ```bash

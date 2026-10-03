@@ -1,0 +1,282 @@
+[
+  {
+    "id": "ex_001",
+    "name": "Press de banca",
+    "category": "Pecho",
+    "muscleGroup": "Pectorales",
+    "searchQuery": "Press de banca Pectorales Barra exercise fitness"
+  },
+  {
+    "id": "ex_002",
+    "name": "Press inclinado con mancuernas",
+    "category": "Pecho",
+    "muscleGroup": "Pectorales",
+    "searchQuery": "Press inclinado con mancuernas Pectorales Mancuernas exercise fitness"
+  },
+  {
+    "id": "ex_003",
+    "name": "Aperturas con mancuernas",
+    "category": "Pecho",
+    "muscleGroup": "Pectorales",
+    "searchQuery": "Aperturas con mancuernas Pectorales Mancuernas exercise fitness"
+  },
+  {
+    "id": "ex_004",
+    "name": "Fondos en paralelas",
+    "category": "Pecho",
+    "muscleGroup": "Pectorales",
+    "searchQuery": "Fondos en paralelas Pectorales exercise fitness"
+  },
+  {
+    "id": "ex_005",
+    "name": "Press de banca inclinado",
+    "category": "Pecho",
+    "muscleGroup": "Pectorales",
+    "searchQuery": "Press de banca inclinado Pectorales Barra exercise fitness"
+  },
+  {
+    "id": "ex_006",
+    "name": "Sentadilla con barra",
+    "category": "Piernas",
+    "muscleGroup": "Cuádriceps",
+    "searchQuery": "Sentadilla con barra Cuádriceps Barra exercise fitness"
+  },
+  {
+    "id": "ex_007",
+    "name": "Peso muerto",
+    "category": "Piernas",
+    "muscleGroup": "Isquiotibiales",
+    "searchQuery": "Peso muerto Isquiotibiales Barra exercise fitness"
+  },
+  {
+    "id": "ex_008",
+    "name": "Prensa de pierna",
+    "category": "Piernas",
+    "muscleGroup": "Cuádriceps",
+    "searchQuery": "Prensa de pierna Cuádriceps Máquina exercise fitness"
+  },
+  {
+    "id": "ex_009",
+    "name": "Zancadas",
+    "category": "Piernas",
+    "muscleGroup": "Cuádriceps",
+    "searchQuery": "Zancadas Cuádriceps Mancuernas exercise fitness"
+  },
+  {
+    "id": "ex_010",
+    "name": "Curl femoral",
+    "category": "Piernas",
+    "muscleGroup": "Isquiotibiales",
+    "searchQuery": "Curl femoral Isquiotibiales Máquina exercise fitness"
+  },
+  {
+    "id": "ex_011",
+    "name": "Extensión de cuádriceps",
+    "category": "Piernas",
+    "muscleGroup": "Cuádriceps",
+    "searchQuery": "Extensión de cuádriceps Cuádriceps Máquina exercise fitness"
+  },
+  {
+    "id": "ex_012",
+    "name": "Elevaciones de talones",
+    "category": "Piernas",
+    "muscleGroup": "Gemelos",
+    "searchQuery": "Elevaciones de talones Gemelos Máquina exercise fitness"
+  },
+  {
+    "id": "ex_013",
+    "name": "Dominadas",
+    "category": "Espalda",
+    "muscleGroup": "Dorsales",
+    "searchQuery": "Dominadas Dorsales exercise fitness"
+  },
+  {
+    "id": "ex_014",
+    "name": "Remo con barra",
+    "category": "Espalda",
+    "muscleGroup": "Dorsales",
+    "searchQuery": "Remo con barra Dorsales Barra exercise fitness"
+  },
+  {
+    "id": "ex_015",
+    "name": "Jalón al pecho",
+    "category": "Espalda",
+    "muscleGroup": "Dorsales",
+    "searchQuery": "Jalón al pecho Dorsales Máquina exercise fitness"
+  },
+  {
+    "id": "ex_016",
+    "name": "Remo con mancuerna",
+    "category": "Espalda",
+    "muscleGroup": "Dorsales",
+    "searchQuery": "Remo con mancuerna Dorsales Mancuernas exercise fitness"
+  },
+  {
+    "id": "ex_017",
+    "name": "Peso muerto rumano",
+    "category": "Espalda",
+    "muscleGroup": "Lumbares",
+    "searchQuery": "Peso muerto rumano Lumbares Barra exercise fitness"
+  },
+  {
+    "id": "ex_018",
+    "name": "Press militar",
+    "category": "Hombros",
+    "muscleGroup": "Deltoides",
+    "searchQuery": "Press militar Deltoides Barra exercise fitness"
+  },
+  {
+    "id": "ex_019",
+    "name": "Elevaciones laterales",
+    "category": "Hombros",
+    "muscleGroup": "Deltoides",
+    "searchQuery": "Elevaciones laterales Deltoides Mancuernas exercise fitness"
+  },
+  {
+    "id": "ex_020",
+    "name": "Elevaciones frontales",
+    "category": "Hombros",
+    "muscleGroup": "Deltoides",
+    "searchQuery": "Elevaciones frontales Deltoides Mancuernas exercise fitness"
+  },
+  {
+    "id": "ex_021",
+    "name": "Pájaros",
+    "category": "Hombros",
+    "muscleGroup": "Deltoides",
+    "searchQuery": "Pájaros Deltoides Mancuernas exercise fitness"
+  },
+  {
+    "id": "ex_022",
+    "name": "Press Arnold",
+    "category": "Hombros",
+    "muscleGroup": "Deltoides",
+    "searchQuery": "Press Arnold Deltoides Mancuernas exercise fitness"
+  },
+  {
+    "id": "ex_023",
+    "name": "Curl de bíceps con barra",
+    "category": "Brazos",
+    "muscleGroup": "Bíceps",
+    "searchQuery": "Curl de bíceps con barra Bíceps Barra exercise fitness"
+  },
+  {
+    "id": "ex_024",
+    "name": "Curl martillo",
+    "category": "Brazos",
+    "muscleGroup": "Bíceps",
+    "searchQuery": "Curl martillo Bíceps Mancuernas exercise fitness"
+  },
+  {
+    "id": "ex_025",
+    "name": "Curl concentrado",
+    "category": "Brazos",
+    "muscleGroup": "Bíceps",
+    "searchQuery": "Curl concentrado Bíceps Mancuernas exercise fitness"
+  },
+  {
+    "id": "ex_026",
+    "name": "Press francés",
+    "category": "Brazos",
+    "muscleGroup": "Tríceps",
+    "searchQuery": "Press francés Tríceps Barra exercise fitness"
+  },
+  {
+    "id": "ex_027",
+    "name": "Extensiones de tríceps",
+    "category": "Brazos",
+    "muscleGroup": "Tríceps",
+    "searchQuery": "Extensiones de tríceps Tríceps Polea exercise fitness"
+  },
+  {
+    "id": "ex_028",
+    "name": "Fondos para tríceps",
+    "category": "Brazos",
+    "muscleGroup": "Tríceps",
+    "searchQuery": "Fondos para tríceps Tríceps exercise fitness"
+  },
+  {
+    "id": "ex_029",
+    "name": "Patada de tríceps",
+    "category": "Brazos",
+    "muscleGroup": "Tríceps",
+    "searchQuery": "Patada de tríceps Tríceps Mancuernas exercise fitness"
+  },
+  {
+    "id": "ex_030",
+    "name": "Plancha",
+    "category": "Core",
+    "muscleGroup": "Abdominales",
+    "searchQuery": "Plancha Abdominales exercise fitness"
+  },
+  {
+    "id": "ex_031",
+    "name": "Crunches",
+    "category": "Core",
+    "muscleGroup": "Abdominales",
+    "searchQuery": "Crunches Abdominales exercise fitness"
+  },
+  {
+    "id": "ex_032",
+    "name": "Elevación de piernas",
+    "category": "Core",
+    "muscleGroup": "Abdominales",
+    "searchQuery": "Elevación de piernas Abdominales exercise fitness"
+  },
+  {
+    "id": "ex_033",
+    "name": "Russian twist",
+    "category": "Core",
+    "muscleGroup": "Oblicuos",
+    "searchQuery": "Russian twist Oblicuos exercise fitness"
+  },
+  {
+    "id": "ex_034",
+    "name": "Mountain climbers",
+    "category": "Core",
+    "muscleGroup": "Abdominales",
+    "searchQuery": "Mountain climbers Abdominales exercise fitness"
+  },
+  {
+    "id": "ex_035",
+    "name": "Burpees",
+    "category": "Cardio",
+    "muscleGroup": "Full body",
+    "searchQuery": "Burpees Full body exercise fitness"
+  },
+  {
+    "id": "ex_036",
+    "name": "Jumping jacks",
+    "category": "Cardio",
+    "muscleGroup": "Full body",
+    "searchQuery": "Jumping jacks Full body exercise fitness"
+  },
+  {
+    "id": "ex_037",
+    "name": "Box jumps",
+    "category": "Cardio",
+    "muscleGroup": "Piernas",
+    "searchQuery": "Box jumps Piernas exercise fitness"
+  },
+  {
+    "id": "ex_038",
+    "name": "Battle ropes",
+    "category": "Cardio",
+    "muscleGroup": "Full body",
+    "searchQuery": "Battle ropes Full body Cuerdas exercise fitness"
+  },
+  {
+    "id": "ex_039",
+    "name": "Kettlebell swing",
+    "category": "Full body",
+    "muscleGroup": "Glúteos",
+    "searchQuery": "Kettlebell swing Glúteos Kettlebell exercise fitness"
+  },
+  {
+    "id": "ex_040",
+    "name": "Thruster",
+    "category": "Full body",
+    "muscleGroup": "Full body",
+    "searchQuery": "Thruster Full body Barra exercise fitness"
+  }
+]

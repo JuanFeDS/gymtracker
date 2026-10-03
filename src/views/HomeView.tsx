@@ -1,15 +1,19 @@
 import type { WorkoutStats } from '../hooks/useWorkoutStats';
 import type { WeightTrend } from '../hooks/useWeightTrend';
-import type { WeightLog } from '../types';
+import type { WeightLog, CompletedSession } from '../types';
 import WeightTrendChart from '../components/charts/WeightTrendChart';
+import { useWeeklyStats } from '../hooks/useWeeklyStats';
 
 interface HomeViewProps {
     stats: WorkoutStats;
     weightTrend: WeightTrend;
     weightLogs: WeightLog[];
+    sessions: CompletedSession[];
     hasActiveSession: boolean;
     onStartSession: () => void;
     onFinishSession: () => void;
+    onContinueSession?: () => void;
+    weeklyGoal?: number;
 }
 
 const StatCard = ({ label, value, helper }: { label: string; value: string; helper?: string }) => (
@@ -17,7 +21,17 @@ const StatCard = ({ label, value, helper }: { label: string; value: string; help
         className="glass"
         style={{
             padding: 'var(--spacing-md)',
-            borderRadius: 'var(--radius-md)'
+            borderRadius: 'var(--radius-md)',
+            transition: 'all 0.3s ease',
+            cursor: 'default'
+        }}
+        onMouseEnter={(e) => {
+            e.currentTarget.style.transform = 'translateY(-4px)';
+            e.currentTarget.style.boxShadow = '0 8px 24px rgba(64, 224, 208, 0.15)';
+        }}
+        onMouseLeave={(e) => {
+            e.currentTarget.style.transform = 'translateY(0)';
+            e.currentTarget.style.boxShadow = 'none';
         }}
     >
         <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginBottom: '6px' }}>{label}</p>
@@ -26,12 +40,13 @@ const StatCard = ({ label, value, helper }: { label: string; value: string; help
     </div>
 );
 
-const HomeView: React.FC<HomeViewProps> = ({ stats, weightTrend, weightLogs, hasActiveSession, onStartSession, onFinishSession }) => {
+const HomeView: React.FC<HomeViewProps> = ({ stats, weightTrend, weightLogs, sessions, hasActiveSession, onStartSession, onFinishSession, onContinueSession, weeklyGoal = 30 }) => {
     const trendLabel = weightTrend.direction === 'flat' ? 'Sin cambios' : weightTrend.direction === 'down' ? 'Bajando' : 'Subiendo';
     const ctaLabel = hasActiveSession ? 'Continuar sesión' : 'Iniciar nueva sesión';
+    const handlePrimaryAction = hasActiveSession ? (onContinueSession || onStartSession) : onStartSession;
 
-    const weeklyTargetSets = 30;
-    const weeklyProgress = Math.min(100, Math.round((stats.totalSets / weeklyTargetSets) * 100));
+    const weeklyStats = useWeeklyStats(sessions);
+    const weeklyProgress = Math.min(100, Math.round((weeklyStats.weeklySets / weeklyGoal) * 100));
 
     return (
         <div className="home-grid">
@@ -75,7 +90,7 @@ const HomeView: React.FC<HomeViewProps> = ({ stats, weightTrend, weightLogs, has
                 </div>
                 <div className="flex gap-sm" style={{ flexWrap: 'wrap' }}>
                     <button
-                        onClick={onStartSession}
+                        onClick={handlePrimaryAction}
                         style={{
                             flex: 1,
                             minWidth: '160px',
@@ -112,13 +127,17 @@ const HomeView: React.FC<HomeViewProps> = ({ stats, weightTrend, weightLogs, has
                         <p>Meta semanal</p>
                         <h3 style={{ fontSize: '1.2rem' }}>Sets completados</h3>
                     </div>
-                    <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>{stats.totalSets}/{weeklyTargetSets}</span>
+                    <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>{weeklyStats.weeklySets}/{weeklyGoal}</span>
                 </div>
                 <div className="progress-shell">
                     <div className="progress-fill" style={{ width: `${weeklyProgress}%` }} />
                 </div>
-                <p style={{ marginTop: 'var(--spacing-sm)', color: 'var(--text-muted)' }}>
-                    Te faltan {Math.max(0, weeklyTargetSets - stats.totalSets)} sets para alcanzar tu objetivo.
+                <p style={{ marginTop: 'var(--spacing-sm)', color: 'var(--text-muted)', fontSize: '0.9rem' }}>
+                    {weeklyStats.weeklySets >= weeklyGoal ? (
+                        <span style={{ color: 'var(--primary)', fontWeight: 600 }}>🎉 ¡Meta alcanzada! Sigue así</span>
+                    ) : (
+                        `Te faltan ${weeklyGoal - weeklyStats.weeklySets} sets para alcanzar tu objetivo`
+                    )}
                 </p>
             </div>
         </div>

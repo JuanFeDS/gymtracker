@@ -39,9 +39,9 @@ export const useUserProfile = () => {
 
         (async () => {
             setSyncing(true);
-            const remote = await fetchRemoteProfile(userId);
-            if (!cancelled && remote) {
-                persistProfile(remote);
+            const result = await fetchRemoteProfile(userId);
+            if (!cancelled && result.success && result.data) {
+                persistProfile(result.data);
             }
             if (!cancelled) {
                 syncedIdRef.current = userId;
@@ -72,7 +72,7 @@ export const useUserProfile = () => {
 
         (async () => {
             setSyncing(true);
-            const remote = await createRemoteProfile({
+            const result = await createRemoteProfile({
                 id: provisionalId,
                 alias: data.alias,
                 email: data.email,
@@ -80,12 +80,12 @@ export const useUserProfile = () => {
                 goal: data.goal,
                 avatarColor
             });
-            if (remote) {
-                persistProfile(remote);
-                syncedIdRef.current = remote.id;
+            if (result.success && result.data) {
+                persistProfile(result.data);
+                syncedIdRef.current = result.data.id;
             } else {
                 persistProfile(null);
-                setError('No se pudo crear el perfil. Intenta nuevamente.');
+                setError(result.error || 'No se pudo crear el perfil. Intenta nuevamente.');
             }
             setSyncing(false);
         })();
@@ -93,16 +93,16 @@ export const useUserProfile = () => {
 
     const login = useCallback(async (alias: string, pin: string) => {
         setSyncing(true);
-        const remote = await loginWithAliasPin(alias, pin);
+        const result = await loginWithAliasPin(alias, pin);
         setSyncing(false);
 
-        if (!remote) {
-            setError('Alias o PIN incorrecto.');
+        if (!result.success || !result.data) {
+            setError(result.error || 'Alias o PIN incorrecto.');
             return { success: false } as const;
         }
 
-        persistProfile(remote);
-        syncedIdRef.current = remote.id;
+        persistProfile(result.data);
+        syncedIdRef.current = result.data.id;
         setError(null);
         return { success: true } as const;
     }, [persistProfile]);
@@ -115,16 +115,18 @@ export const useUserProfile = () => {
 
         (async () => {
             setSyncing(true);
-            const remote = await updateRemoteProfileRecord(profile.id, {
+            const result = await updateRemoteProfileRecord(profile.id, {
                 alias: optimistic.alias,
                 email: optimistic.email,
                 pin: optimistic.pin,
                 goal: optimistic.goal,
                 avatarColor: optimistic.avatarColor
             });
-            if (remote) {
-                persistProfile(remote);
-                syncedIdRef.current = remote.id;
+            if (result.success && result.data) {
+                persistProfile(result.data);
+                syncedIdRef.current = result.data.id;
+            } else if (result.error) {
+                setError(result.error);
             }
             setSyncing(false);
         })();

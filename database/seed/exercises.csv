@@ -1,0 +1,41 @@
+exercise_id,exercise_name,category,muscle_group,equipment,difficulty,description
+ex_001,Press de banca,Pecho,Pectorales,Barra,Intermedio,Ejercicio compuesto para desarrollo de pecho
+ex_002,Press inclinado con mancuernas,Pecho,Pectorales,Mancuernas,Intermedio,Desarrollo del pecho superior
+ex_003,Aperturas con mancuernas,Pecho,Pectorales,Mancuernas,Principiante,Aislamiento de pectorales
+ex_004,Fondos en paralelas,Pecho,Pectorales,Peso corporal,Intermedio,Ejercicio compuesto para pecho y tríceps
+ex_005,Press de banca inclinado,Pecho,Pectorales,Barra,Intermedio,Enfoque en pecho superior
+ex_006,Sentadilla con barra,Piernas,Cuádriceps,Barra,Intermedio,Rey de los ejercicios de pierna
+ex_007,Peso muerto,Piernas,Isquiotibiales,Barra,Avanzado,Ejercicio compuesto para cadena posterior
+ex_008,Prensa de pierna,Piernas,Cuádriceps,Máquina,Principiante,Desarrollo de cuádriceps
+ex_009,Zancadas,Piernas,Cuádriceps,Mancuernas,Principiante,Ejercicio unilateral para piernas
+ex_010,Curl femoral,Piernas,Isquiotibiales,Máquina,Principiante,Aislamiento de isquiotibiales
+ex_011,Extensión de cuádriceps,Piernas,Cuádriceps,Máquina,Principiante,Aislamiento de cuádriceps
+ex_012,Elevaciones de talones,Piernas,Gemelos,Máquina,Principiante,Desarrollo de pantorrillas
+ex_013,Dominadas,Espalda,Dorsales,Peso corporal,Intermedio,Ejercicio compuesto para espalda
+ex_014,Remo con barra,Espalda,Dorsales,Barra,Intermedio,Desarrollo de espalda media
+ex_015,Jalón al pecho,Espalda,Dorsales,Máquina,Principiante,Alternativa a dominadas
+ex_016,Remo con mancuerna,Espalda,Dorsales,Mancuernas,Principiante,Ejercicio unilateral de espalda
+ex_017,Peso muerto rumano,Espalda,Lumbares,Barra,Intermedio,Enfoque en cadena posterior
+ex_018,Press militar,Hombros,Deltoides,Barra,Intermedio,Desarrollo de hombros
+ex_019,Elevaciones laterales,Hombros,Deltoides,Mancuernas,Principiante,Aislamiento de deltoides laterales
+ex_020,Elevaciones frontales,Hombros,Deltoides,Mancuernas,Principiante,Enfoque en deltoides frontales
+ex_021,Pájaros,Hombros,Deltoides,Mancuernas,Principiante,Desarrollo de deltoides posteriores
+ex_022,Press Arnold,Hombros,Deltoides,Mancuernas,Intermedio,Variante de press de hombros
+ex_023,Curl de bíceps con barra,Brazos,Bíceps,Barra,Principiante,Ejercicio básico de bíceps
+ex_024,Curl martillo,Brazos,Bíceps,Mancuernas,Principiante,Desarrollo de braquial
+ex_025,Curl concentrado,Brazos,Bíceps,Mancuernas,Principiante,Aislamiento de bíceps
+ex_026,Press francés,Brazos,Tríceps,Barra,Intermedio,Desarrollo de tríceps
+ex_027,Extensiones de tríceps,Brazos,Tríceps,Polea,Principiante,Aislamiento de tríceps
+ex_028,Fondos para tríceps,Brazos,Tríceps,Peso corporal,Intermedio,Ejercicio compuesto para tríceps
+ex_029,Patada de tríceps,Brazos,Tríceps,Mancuernas,Principiante,Aislamiento de tríceps
+ex_030,Plancha,Core,Abdominales,Peso corporal,Principiante,Ejercicio isométrico de core
+ex_031,Crunches,Core,Abdominales,Peso corporal,Principiante,Ejercicio básico de abdominales
+ex_032,Elevación de piernas,Core,Abdominales,Peso corporal,Intermedio,Enfoque en abdomen bajo
+ex_033,Russian twist,Core,Oblicuos,Peso corporal,Intermedio,Desarrollo de oblicuos
+ex_034,Mountain climbers,Core,Abdominales,Peso corporal,Intermedio,Ejercicio dinámico de core
+ex_035,Burpees,Cardio,Full body,Peso corporal,Intermedio,Ejercicio de alta intensidad
+ex_036,Jumping jacks,Cardio,Full body,Peso corporal,Principiante,Calentamiento cardiovascular
+ex_037,Box jumps,Cardio,Piernas,Peso corporal,Intermedio,Ejercicio pliométrico
+ex_038,Battle ropes,Cardio,Full body,Cuerdas,Intermedio,Entrenamiento de alta intensidad
+ex_039,Kettlebell swing,Full body,Glúteos,Kettlebell,Intermedio,Ejercicio balístico
+ex_040,Thruster,Full body,Full body,Barra,Avanzado,Combinación de sentadilla y press

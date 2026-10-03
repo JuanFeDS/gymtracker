@@ -1,4 +1,5 @@
 import type { UserProfile } from '../types';
+import type { ServiceResult } from '../types/service';
 import { supabase } from './supabaseClient';
 
 const today = () => new Date().toISOString().slice(0, 10);
@@ -9,16 +10,16 @@ const normalizeGoal = (goal?: string | null): UserProfile['goal'] => {
     return allowed.includes(goal as typeof allowed[number]) ? goal as UserProfile['goal'] : undefined;
 };
 
-const mapRowToProfile = (row: any): UserProfile => ({
-    id: row.user_id,
-    alias: row.username ?? 'Sin alias',
-    email: row.user_email ?? '',
-    pin: row.password ?? '',
-    goal: normalizeGoal(row.user_goal),
-    avatarColor: row.avatar_color ?? '#40E0D0'
+const mapRowToProfile = (row: Record<string, unknown>): UserProfile => ({
+    id: row.user_id as string,
+    alias: (row.username as string) ?? 'Sin alias',
+    email: (row.user_email as string) ?? '',
+    pin: (row.password as string) ?? '',
+    goal: normalizeGoal(row.user_goal as string | null),
+    avatarColor: (row.avatar_color as string) ?? '#40E0D0'
 });
 
-export async function loginWithAliasPin(alias: string, pin: string): Promise<UserProfile | null> {
+export async function loginWithAliasPin(alias: string, pin: string): Promise<ServiceResult<UserProfile>> {
     const { data, error } = await supabase
         .from('users')
         .select('*')
@@ -28,16 +29,20 @@ export async function loginWithAliasPin(alias: string, pin: string): Promise<Use
 
     if (error) {
         console.error('Error al iniciar sesión en Supabase:', error.message);
-        return null;
+        return { success: false, error: 'Error al conectar con el servidor. Intenta nuevamente.' };
     }
 
-    if (!data) return null;
+    if (!data) {
+        return { success: false, error: 'Alias o PIN incorrectos.' };
+    }
 
-    return mapRowToProfile(data);
+    return { success: true, data: mapRowToProfile(data) };
 }
 
-export async function fetchRemoteProfile(userId?: string): Promise<UserProfile | null> {
-    if (!userId) return null;
+export async function fetchRemoteProfile(userId?: string): Promise<ServiceResult<UserProfile>> {
+    if (!userId) {
+        return { success: false, error: 'ID de usuario no proporcionado.' };
+    }
 
     const { data, error } = await supabase
         .from('users')
@@ -47,15 +52,17 @@ export async function fetchRemoteProfile(userId?: string): Promise<UserProfile |
 
     if (error) {
         console.error('Error al obtener usuario de Supabase:', error.message);
-        return null;
+        return { success: false, error: 'No se pudo cargar el perfil.' };
     }
 
-    if (!data) return null;
+    if (!data) {
+        return { success: false, error: 'Usuario no encontrado.' };
+    }
 
-    return mapRowToProfile(data);
+    return { success: true, data: mapRowToProfile(data) };
 }
 
-export async function createRemoteProfile(payload: { id?: string; alias: string; email: string; pin: string; goal?: UserProfile['goal']; avatarColor: string; }): Promise<UserProfile | null> {
+export async function createRemoteProfile(payload: { id?: string; alias: string; email: string; pin: string; goal?: UserProfile['goal']; avatarColor: string; }): Promise<ServiceResult<UserProfile>> {
     const insertPayload: Record<string, string | undefined> = {
         username: payload.alias,
         user_email: payload.email,
@@ -78,13 +85,17 @@ export async function createRemoteProfile(payload: { id?: string; alias: string;
 
     if (error) {
         console.error('Error al crear usuario en Supabase:', error.message);
-        return null;
+        const isDuplicate = error.message.includes('duplicate') || error.code === '23505';
+        return { 
+            success: false, 
+            error: isDuplicate ? 'Este alias ya está en uso.' : 'No se pudo crear el usuario. Intenta nuevamente.' 
+        };
     }
 
-    return mapRowToProfile(data);
+    return { success: true, data: mapRowToProfile(data) };
 }
 
-export async function updateRemoteProfile(userId: string, changes: Partial<{ alias: string; email: string; pin: string; goal?: UserProfile['goal']; avatarColor: string; }>): Promise<UserProfile | null> {
+export async function updateRemoteProfile(userId: string, changes: Partial<{ alias: string; email: string; pin: string; goal?: UserProfile['goal']; avatarColor: string; }>): Promise<ServiceResult<UserProfile>> {
     const mapped: Record<string, string | undefined> = {
         username: changes.alias,
         user_email: changes.email,
@@ -113,8 +124,8 @@ export async function updateRemoteProfile(userId: string, changes: Partial<{ ali
 
     if (error) {
         console.error('Error al actualizar usuario en Supabase:', error.message);
-        return null;
+        return { success: false, error: 'No se pudo actualizar el perfil.' };
     }
 
-    return mapRowToProfile(data);
+    return { success: true, data: mapRowToProfile(data) };
 }

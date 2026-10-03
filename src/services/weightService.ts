@@ -1,14 +1,15 @@
 import type { WeightLog } from '../types';
+import type { ServiceResult } from '../types/service';
 import { generateId } from '../utils/id';
 import { supabase } from './supabaseClient';
 
-const mapRowToWeight = (row: any): WeightLog => ({
-    id: row.weight_id,
-    date: row.recorded_at,
+const mapRowToWeight = (row: Record<string, unknown>): WeightLog => ({
+    id: row.weight_id as string,
+    date: row.recorded_at as string,
     weight: Number(row.weight_kg)
 });
 
-export async function fetchWeightLogs(userId: string): Promise<WeightLog[]> {
+export async function fetchWeightLogs(userId: string): Promise<ServiceResult<WeightLog[]>> {
     const { data, error } = await supabase
         .from('weights')
         .select('*')
@@ -17,13 +18,13 @@ export async function fetchWeightLogs(userId: string): Promise<WeightLog[]> {
 
     if (error) {
         console.error('Error al obtener pesos desde Supabase:', error.message);
-        return [];
+        return { success: false, error: 'No se pudieron cargar los registros de peso.', data: [] };
     }
 
-    return (data ?? []).map(mapRowToWeight);
+    return { success: true, data: (data ?? []).map(mapRowToWeight) };
 }
 
-export async function addRemoteWeightLog(userId: string, weight: number): Promise<WeightLog | null> {
+export async function addRemoteWeightLog(userId: string, weight: number): Promise<ServiceResult<WeightLog>> {
     const { data, error } = await supabase
         .from('weights')
         .insert({
@@ -37,13 +38,13 @@ export async function addRemoteWeightLog(userId: string, weight: number): Promis
 
     if (error) {
         console.error('Error al registrar peso en Supabase:', error.message);
-        return null;
+        return { success: false, error: 'No se pudo guardar el peso. Intenta nuevamente.' };
     }
 
-    return mapRowToWeight(data);
+    return { success: true, data: mapRowToWeight(data) };
 }
 
-export async function deleteRemoteWeightLog(userId: string, weightId: string): Promise<boolean> {
+export async function deleteRemoteWeightLog(userId: string, weightId: string): Promise<ServiceResult<boolean>> {
     const { error } = await supabase
         .from('weights')
         .delete()
@@ -52,8 +53,8 @@ export async function deleteRemoteWeightLog(userId: string, weightId: string): P
 
     if (error) {
         console.error('Error al eliminar peso en Supabase:', error.message);
-        return false;
+        return { success: false, error: 'No se pudo eliminar el registro.' };
     }
 
-    return true;
+    return { success: true, data: true };
 }

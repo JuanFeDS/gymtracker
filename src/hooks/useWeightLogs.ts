@@ -9,18 +9,20 @@ export const useWeightLogs = (userId?: string) => {
 
     useEffect(() => {
         if (!userId) {
-            setLogs([]);
-            setError('Debes iniciar sesión para registrar tu peso.');
             return;
         }
         let cancelled = false;
 
         (async () => {
             setLoading(true);
-            const remoteLogs = await fetchWeightLogs(userId);
+            const result = await fetchWeightLogs(userId);
             if (!cancelled) {
-                setLogs(remoteLogs);
-                setError(null);
+                if (result.success) {
+                    setLogs(result.data || []);
+                    setError(null);
+                } else {
+                    setError(result.error || 'No se pudieron cargar los registros.');
+                }
                 setLoading(false);
             }
         })();
@@ -38,11 +40,11 @@ export const useWeightLogs = (userId?: string) => {
 
         setLoading(true);
         setError(null);
-        const remote = await addRemoteWeightLog(userId, weight);
-        if (remote) {
-            setLogs(prev => [remote, ...prev.filter(log => log.id !== remote.id)]);
+        const result = await addRemoteWeightLog(userId, weight);
+        if (result.success && result.data) {
+            setLogs(prev => [result.data!, ...prev.filter(log => log.id !== result.data!.id)]);
         } else {
-            setError('No se pudo guardar el peso. Revisa tu conexión o permisos.');
+            setError(result.error || 'No se pudo guardar el peso. Revisa tu conexión o permisos.');
         }
         setLoading(false);
     }, [userId]);
@@ -55,11 +57,11 @@ export const useWeightLogs = (userId?: string) => {
 
         setLoading(true);
         setError(null);
-        const success = await deleteRemoteWeightLog(userId, weightId);
-        if (success) {
+        const result = await deleteRemoteWeightLog(userId, weightId);
+        if (result.success) {
             setLogs(prev => prev.filter(log => log.id !== weightId));
         } else {
-            setError('No se pudo eliminar el peso. Intenta nuevamente.');
+            setError(result.error || 'No se pudo eliminar el peso. Intenta nuevamente.');
         }
         setLoading(false);
     }, [userId]);

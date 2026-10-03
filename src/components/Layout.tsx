@@ -69,8 +69,9 @@ const Layout: React.FC<LayoutProps> = ({ activeTab, onTabChange, children }) => 
                 height: '300px',
                 background: 'var(--primary-glow)',
                 filter: 'blur(100px)',
-                zIndex: -1,
-                borderRadius: '50%'
+                zIndex: 0,
+                borderRadius: '50%',
+                pointerEvents: 'none'
             }} />
             <div style={{
                 position: 'fixed',
@@ -80,8 +81,9 @@ const Layout: React.FC<LayoutProps> = ({ activeTab, onTabChange, children }) => 
                 height: '250px',
                 background: theme === 'dark' ? 'hsla(80, 100%, 50%, 0.1)' : 'hsla(80, 100%, 50%, 0.05)',
                 filter: 'blur(80px)',
-                zIndex: -1,
-                borderRadius: '50%'
+                zIndex: 0,
+                borderRadius: '50%',
+                pointerEvents: 'none'
             }} />
         </div>
     );
